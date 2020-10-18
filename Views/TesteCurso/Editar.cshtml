@@ -1,0 +1,114 @@
+﻿@model Exame_Online.Models.TesteCursoAddModel
+@{
+    ViewData["Title"] = "Editar Teste";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        var msg = '@ViewData["result"]';
+        if (msg == '1')
+        {
+            toastr.success("Editado com sucesso!!!", "Teste!!");
+            window.setTimeout(function () {
+                //Direcionar para lista dos Curso!! depois da Cadastrar
+                window.location.href = "@Url.Action("Lista", "TesteCurso")";
+            }, 500);
+        }
+    });
+</script>
+<div class="page-header mt-0 shadow p-3">
+    <ol class="breadcrumb mb-sm-0">
+        <li class="breadcrumb-item"><a asp-action="Lista" asp-controller="TesteCurso">Listar</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Editar</li>
+    </ol>
+</div>
+<div class="container">
+    <div class="wapper-disciplina">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="mb-0"><b>Teste</b>/Curso</h2>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    @*<div class="col-md-12">*@
+                    <form id="Form_Teste" asp-action="Editar" asp-controller="TesteCurso" method="post" name="Form_Teste" autocomplete="off">
+                        <div class="form-row">
+
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <div class="alert alert-danger mb-0 text-white text-center" style="padding:10px;" role="alert" asp-validation-summary="ModelOnly">
+                                        <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+                                        <span class="alert-inner--text"><strong>Alerta!</strong> !</span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label> Descrição Departamento</label>
+                                    <select asp-for="Id_Departamento" class="form-control" id="Depart"
+                                            asp-items="@ViewBag.Departamentos">
+                                        <option value="">-- Selecione Departamento --</option>
+                                    </select>
+                                    <span asp-validation-for="Id_Departamento" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <label asp-for="Id_Curso"></label>
+                                    <select asp-for="Id_Curso" id="Curso" name="Id_Curso" class="form-control"
+                                            asp-items="@(new SelectList(string.Empty,"Id_Curso","Nome_Curso"))">
+                                        <option value="">----</option>
+                                    </select>
+                                    <span asp-validation-for="Id_Curso" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="form-group">
+                                    <label asp-for="Id_Disciplina"></label>
+                                    <select asp-for="Id_Disciplina" id="Disciplina" class="form-control"
+                                            asp-items="@(new SelectList(string.Empty,"Id_Disciplina","Nome_Disciplina"))">
+                                        <option value="">----</option>
+                                    </select>
+                                    <span asp-validation-for="Id_Disciplina" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-5 ">
+                                <div class="form-group">
+                                    <label asp-for="Estado"></label>
+                                    <select id="Estado" name="Estado" class="form-control">
+                                        <option value="">-- Selecione Estado --</option>
+                                        <option value="true">-- Activo --</option>
+                                        <option value="false">-- Inactivo --</option>
+                                    </select>
+                                    <span asp-validation-for="Estado" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 ">
+                                <div class="form-group">
+                                    <label asp-for="Perguntas"></label>
+                                    <input asp-for="Perguntas" class="form-control" placeholder="Nº de Perguntas" />
+                                    <span asp-validation-for="Perguntas" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Duracao"></label>
+                                    <input asp-for="Duracao" class="form-control" placeholder="Duração" />
+                                    <span asp-validation-for="Duracao" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-save"></i>Editar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

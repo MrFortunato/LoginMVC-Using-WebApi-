@@ -1,0 +1,653 @@
+﻿@model IEnumerable<Exame_Online.ModelsView.CursoViewModel>
+@{
+    ViewData["Title"] = "Lista dos Cursos";
+    Layout = "~/Views/Shared/Layout.cshtml";
+
+}
+<div class="page-header mt-0 shadow p-3">
+    <div class="btn-group mb-0">
+        <a href="#" onclick="AddEdit_Testes(0,0)" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+    </div>
+</div>
+<!-- app-content-->
+<!-- Tables-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="mb-0">Testes Por Curso</h2>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-sm w-100 text-nowrap" id="TbTestes">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Curso</th>
+                            <th>#</th>
+                            <th>Teste</th>
+                            <th>Total Perguntas</th>
+                            <th>Duração</th>
+                            <th>Estado</th>
+                            <th>Operação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Para Cadastrar e Editar-->
+<div class="modal fade" id="Modal_Testes" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal_Titulo"></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body-teste">
+                <div class="container">
+                    <form id="Form_Teste" name="Form_Teste" autocomplete="off">
+                        <div class="form-row">
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <!--Inicio Alerta Dib-->
+                                    <div class="alert alert-danger mb-0 text-white text-center" id="DivAlerta" style="padding:10px;display:none;" role="alert">
+                                        <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+                                        <span class="alert-inner--text" id="InfoTexto"><strong>Alerta!</strong> !</span>
+                                        <button type="button" id="btnX" class="close" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div><!--Fim Alerta Div-->
+                                </div>
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <select class="form-control Id_Departamento" name="Departamento" id="Departamento">
+                                        <option value="-1">----</option>
+                                    </select>
+                                    <span id="erro_Id_Departamento" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <select id="Curso" name="Id_Curso" class="form-control">
+                                        <option value="-1">----</option>
+                                    </select>
+                                    <span id="erro_Id_Curso" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="form-group">
+                                    <select id="Disciplina" name="Disciplina" class="form-control">
+                                        <option value="-1">----</option>
+                                    </select>
+                                    <span id="erro_nomeDisc" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-5 ">
+                                <div class="form-group">
+                                    <select id="Estado" name="Estado" class="form-control">
+                                        <option value="-1">-- Selecione Estado --</option>
+                                        <option value="true">-- Activo --</option>
+                                        <option value="false">-- Inactivo --</option>
+                                    </select>
+                                    <span id="erro_Estado" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 ">
+                                <div class="form-group">
+                                    <input id="Perguntas" class="form-control" placeholder="Nº de Perguntas" />
+                                    <span id="erro_pergunta" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input id="duracao" class="form-control" placeholder="Duração do Teste (min)" />
+                                    <span id="erro_duracao" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <a href="#" id="btn_Teste" class="btn btn-success btn-block"><i class="fa fa-save"></i><span id="btn_Titulo"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div><!--Fim Container-->
+            </div>
+        </div>
+
+    </div>
+</div><!-- Fim Modal Para Cadastrar e Editar-->
+@*<script src="~/lib/jquery/jquery.min.js"></script>*@
+<script>
+
+    $(document).ready(function () {
+        ListarTestes();
+        //Reset o Formulario Disciplina
+        //$('#modal_Testes').on('hidden.bs.modal', function () {
+        //    $('#modal_Testes Form_Teste')[0].reset();
+
+        //});
+
+    });
+
+    // Função para Listar Cursos
+    function ListarTestes() {
+
+        $("#TbTestes").DataTable({
+            "destroy": true,
+            "retrieve": true,
+            "language": {
+                "lengthMenu": "Exibe _MENU_ Registros por página",
+                "search": "Procurar",
+                "paginate": { "previous": "Retornar", "next": "Avançar" },
+                "zeroRecords": "Nada foi encontrado",
+                "info": "Exibindo página _PAGE_ de _PAGES_",
+                "infoEmpty": "Sem registros",
+                "infoFiltered": "(filtrado de _MAX_ regitros totais)"
+            },
+            "columnDefs": [
+                {
+                    "targets": [0],// Selecionar a Coluna
+                    "visible": false,// Esconder a Coluna
+
+                },
+                {
+                    "targets": [2],
+                    "visible": false
+                }
+            ],
+            /*    "processing": true,*/    // mostrar a progress bar
+            "filter": true,            // habilita o filtro(search box)
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]], //define as opções de paginação
+            "pageLength": 10,      // define o tamanho da página
+            "ajax": {
+                "url": "https://localhost:44324/api/Curso/TesteDisciplina",
+                "type": "Get",
+                "datatype": "json",
+                "dataSrc": ""
+
+            },
+            "columns": [
+                { "data": "Id_Curso", "autoWidth": true },
+                { "data": "Nome_Curso", "autoWidth": true },
+
+                { "data": "Id_Disciplina", "autoWidth": true },
+
+                {
+
+                    "data": "Disciplina", "autoWidth": true
+                },
+                {
+                    //className: "text-center",
+                    "data": "Perguntas", "autoWidth": true
+                },
+                { "data": "Duracao", "autoWidth": true },
+                {
+                    data: null, render: function (data, type, row) {
+                        if(data.Estado === true) {
+                            return 'Activo';
+                        } else{
+                            return 'Inactivo';
+                        }
+                        
+                    }
+                },
+
+                {
+                    data: null, render: function (data, type, row) {
+
+                        return '<a href="#" onclick="AddEdit_Testes(' + row.Id_Curso + ',' + row.Id_Disciplina + ')" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a> <a href="#" onclick="Eliminar(' + row.Id_Curso + ',' + row.Id_Disciplina + ')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>';
+                    }
+                },
+
+            ]
+
+        });
+    }
+    //Validar os dados
+    function Validar() {
+        var v = true;
+
+        var departamento = document.Form_Teste.Departamento;
+        if (departamento.value == "-1") {
+            $("#erro_Id_Departamento").show();
+            $("#erro_Id_Departamento").html("Selecione o departamento");
+            v = false;
+        }
+        else {
+            $("#erro_Id_Departamento").hide();
+        }
+        var IdCurso = document.Form_Teste.Id_Curso;
+        if (IdCurso.value == "-1") {
+            $("#erro_Id_Curso").show();
+            $("#erro_Id_Curso").html("Selecione o  curso");
+            v = false;
+        }
+        else {
+            $("#erro_Id_Curso").hide();
+
+
+        }
+        var IdDisciplina = document.Form_Teste.Disciplina;
+        if (IdDisciplina.value == "-1") {
+
+
+            $("#erro_nomeDisc").show();
+            $("#erro_nomeDisc").html("Selecione a Disciplina");
+            v = false;
+        }
+        else {
+            $("#erro_nomeDisc").hide()
+
+        }
+        var Estado = document.Form_Teste.Estado;
+        if (Estado.value == "-1") {
+            $("#erro_Estado").show();
+            $("#erro_Estado").html("Selecione o estado");
+            v = false;
+        }
+        else {
+            $("#erro_Estado").hide();
+
+        }
+
+        var perguntas = document.Form_Teste.Perguntas;
+        if (perguntas.value == "") {
+            $("#erro_pergunta").show();
+            $("#erro_pergunta").html("Digite o Nº total de perguntas");
+            v = false;
+        }
+        else {
+            $("#erro_pergunta").hide();
+        }
+        var duracao = document.Form_Teste.duracao;
+        if (duracao.value == "") {
+            $("#erro_duracao").show();
+            $("#erro_duracao").html("Digite a duração do Teste");
+            v = false;
+        }
+        else {
+
+            $("#erro_duracao").hide();
+
+        }
+        return v;
+    }
+    //Função chamal o Modal Add e Edit
+    function AddEdit_Testes(Id_Curso, Id_Disciplina) {
+        Limpar();//Função limpar os Campos
+        CarregarDepartamento();// Função para carregar o Dropdown Departamento
+        if (Id_Curso == 0 && Id_Disciplina == 0) {
+            ResetDropDown();
+            $("#modal_Titulo").html("Add Teste/Curso");
+            $("#Form_Teste #Perguntas").attr("placeholder", "Nº de Perguntas");
+            $("#btn_Teste").removeClass("btn btn-primary btn-block").addClass("btn btn-success btn-block");
+            $("#btn_Titulo").html("Cadastrar");
+            $("#Modal_Testes").modal("show");
+        }
+        else if (Id_Curso > 0 && Id_Disciplina > 0) {
+            CarregarCurso();
+            CarregarDisciplina();
+            $.ajax({
+                url: "https://localhost:44324/api/Curso/Editar",
+                type: "GET",
+                dataType: "Json",
+                data: {
+                    IdC: Id_Curso,
+                    IdD: Id_Disciplina
+                },
+                success: function (data) {
+                    $("#btn_Teste").removeClass("btn btn-success btn-block").addClass("btn btn-primary btn-block");
+                    $("#btn_Titulo").html("Editar");
+                    $("#modal_Titulo").html("Editar Teste/Curso");
+                    $(".Id_Departamento").val(data.Id_Departamento);
+                    $("#Curso").val(data.Id_Curso);
+                    $(".Id_Disciplina").val(data.Id_Departamento);
+                    $('.Id_Departamento option[value="' + data.Id_Departamento + '"]').attr("selected", "selected");// Selecionado Dropdownlist
+                    $('#Disciplina option[value="' + data.Id_Disciplina + '"]').attr("selected", "selected");// Selecionado Dropdownlist
+                    $('#Curso option[value="' + data.Id_Curso + '"]').attr("selected", "selected");// Selecionado Dropdownlist
+                    $('#Estado option[value="' + data.Estado + '"]').attr("selected", "selected");// Selecionado Dropdownlist
+                    $("#duracao").val(data.Duracao);
+                    $("#Perguntas").val(data.Perguntas);
+                    $("#Modal_Testes").modal();
+                }
+            }).fail(function () {
+                swal('Oops...', 'Something went wrong with ajax !', 'error');
+            });
+
+        }
+        else {
+            swal('Oops...', 'Requisitos não completos!', 'error');
+        }
+    }
+
+    function Limpar() {
+        $("#erro_Id_Departamento").hide();
+        $("#erro_Id_Curso").hide();
+        $("#erro_Estado").hide();
+        $("#erro_nomeDisc").hide()
+        $("#erro_duracao").hide();
+        $("#erro_pergunta").hide();
+        EsconderAlerta();
+    }
+
+
+    $("#btn_Teste").click(function () {
+        if ($("#btn_Titulo").text() == "Cadastrar") {
+
+            AddTese();
+        }
+        else {
+            EditarTeste();
+
+        }
+
+    })
+
+    // Função para cadastramento Teste
+    function AddTese() {
+        var mensagem = "";
+        var error_message = document.getElementById("InfoTexto");
+        var v = false;
+        if ($('#Estado').val() == "true") {
+            v = true
+        }
+        var model = {
+            'Id_Curso': parseInt($('#Curso').val()),
+            'Id_Disciplina': parseInt($('#Disciplina').val()),
+            'Estado': v,
+            'Perguntas': parseInt($('#Perguntas').val()),
+            'Duracao': parseInt($('#duracao').val()),
+        };
+        //Validação
+        var val = Validar();
+        if (val == false) {
+            return false
+        };
+
+        const uri = "https://localhost:44324/api/Curso/AddTeste";
+
+        fetch(uri, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                //Pragma: 'no-cache',
+            },
+            body: JSON.stringify(model),
+            //credentials: 'no',
+            //mode: 'cors',
+        }).then(response => response.json())
+            .then(data => {
+                if (data == "1") {
+                    $("#modal_Testes").modal("hide");
+                    toastr.success("Adicionado com sucesso!!!", "Teste!!");          
+                    $("#TbTestes").DataTable().ajax.reload();                   
+                }
+                else if (data == "2") {
+                    ExibirAlerta();
+                    mensagem = "Não existe perguntas cadastrada da disciplina selecionada";
+                    error_message.innerHTML = mensagem;
+                }
+                else if (data == "3") {
+                    ExibirAlerta();
+                    mensagem = "Numéro de perguntas insuficiente na Base de Dados";
+                    error_message.innerHTML = mensagem;
+                }
+                else if (data == "4") {
+                    ExibirAlerta();
+                    mensagem = "Teste já associado";
+                    error_message.innerHTML = mensagem;
+                }
+                else {
+                    swal('Oops...', 'Contacte o adminstrador do Sistema !', 'error');
+                }
+                //console.log('Success:', data);
+            })
+            .catch((error) => {
+                swal('Oops...', error, 'error');
+            });
+
+    }
+
+    // Função para Editar Teste
+    function EditarTeste() {
+        var mensagem = "";
+        var error_message = document.getElementById("InfoTexto");
+        var v = false;
+        if ($('#Estado').val() == "true") {
+            v = true
+        }
+        var model = {
+            'Id_Curso': parseInt($('#Curso').val()),
+            'Id_Disciplina': parseInt($('#Disciplina').val()),
+            'Estado': v,
+            'Perguntas': parseInt($('#Perguntas').val()),
+            'Duracao': parseInt($('#duracao').val()),
+        };
+        //Validação
+        var val = Validar();
+        if (val == false) {
+            return false
+        };
+
+        const uri = "https://localhost:44324/api/Curso/Editar";
+
+        fetch(uri, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                //Pragma: 'no-cache',
+            },
+            body: JSON.stringify(model),
+            //credentials: 'no',
+            //mode: 'cors',
+        }).then(response => response.json())
+            .then(data => {
+
+                if (data == "1") {
+                    $("#modal_Testes").modal("hide");
+                    toastr.success("Editado com sucesso!!!", "Teste!!");          
+                    $("#TbTestes").DataTable().ajax.reload();  
+                  
+                }
+                else if (data == "2") {
+                    ExibirAlerta();
+                    mensagem = "Não existe perguntas cadastrada da disciplina selecionada";
+                    error_message.innerHTML = mensagem;
+                }
+                else if (data == "3") {
+                    ExibirAlerta();
+                    mensagem = "Numéro de perguntas insuficiente na Base de Dados";
+                    error_message.innerHTML = mensagem;
+                }        
+                else {
+                    swal('Oops...', 'Contacte o adminstrador do Sistema !', 'error');
+                }
+                //console.log('Success:', data);
+            })
+            .catch((error) => {
+                swal('Oops...', error, 'error');
+            });
+    }
+
+    // Função para eliminar Curso
+    function Eliminar(id) {
+        swal({
+            icon: "warning",
+            title: "Deseja Eliminar?",
+            text: "O livro será eliminado da base de dados",
+            type: 'warning',
+
+            buttons: {
+                cancel: true,
+                confirm: "Confirmar",
+            }
+        }).then((Apagar) => {
+            if (Apagar) {
+                $.ajax({
+                    url: "/TesteCurso/Eliminar?Id=" + id,
+                    type: "Delete",
+                    data: {},
+                    dataType: 'json'
+                })
+                    .done(function (data) {
+                        if (data == "1") {
+                            toastr.success("Deletado com sucesso!!!", "Curso");
+                            $("#TbCursos").DataTable().ajax.reload();
+                          
+
+                        } else {
+                            toastr.error("Erro ao Eliminar!!!", "Erro!!");
+                        }
+
+                    })
+                    .fail(function () {
+                        swal('Oops...', 'Contacte o adminstrador do Sistema !', 'error');
+                    });
+            }
+
+        })
+
+    }
+
+    //Limpar Dropdown Curso
+    function ResetDropDown() {
+        $("#Curso").empty();
+        var dp = '<option value="-1">----</option>'
+        $("#Curso").append(dp);
+        ResetDropDownDisc();
+
+    }
+    //Limpar Dropdown Curso
+    function ResetDropDownDisc() {
+        $("#Disciplina").empty();
+        var cc = '<option value="-1">----</option>'
+        $("#Disciplina").append(cc);
+    }
+    // Funçao para Carregar dropdown Departamento
+    function CarregarDepartamento() {
+        $.ajax({
+            url: "https://localhost:44324/api/Departamento/GetAll",
+            type: "Get",
+            dataType: "Json",
+            success: function (data) {
+                var html = '<option value="-1"> -- Selecione o Departamento --</option>'
+                for (var i = 0; i < data.length; i++) {
+                    html += '<option value="' + data[i].DepartamentoId + '"> ' + data[i].NomeDepartamento + '</option>';
+                }
+                $(".Id_Departamento").html(html);
+            }
+        })
+            .fail(function () {
+                swal('Oops...', 'Something went wrong with ajax !', 'error');
+            });
+    }
+
+    // Funçao para Carregar dropdown Curso
+    function CarregarCurso() {
+
+        $.ajax({
+            url: "https://localhost:44324/api/Curso/GetAll",
+            type: "Get",
+            dataType: "Json",
+            success: function (data) {
+                var html = '<option value="-1">-- Selecione o Curso --</option>'
+                for (var i = 0; i < data.length; i++) {
+                    html += '<option value="' + data[i].CursoId + '"> ' + data[i].NomeCurso + '</option>';
+                }
+                $("#Curso").html(html);
+            }
+        }).fail(function () {
+            swal('Oops...', 'Erro ao carregar os cursos!', 'error');
+        });
+
+    }
+    // Funçao para Carregar dropdown Curso
+    function CarregarDisciplina() {
+        $.ajax({
+            type: "Get",
+            url: "https://localhost:44324/api/Disciplina/GetAll",
+            datatype: "json",
+            success: function (data) {
+                var m = '<option value="-1">-- Selecione a Disciplina --</option>'
+                for (var i = 0; i < data.length; i++) {
+                    m += '<option value="' + data[i].Id_Disciplina + '"> ' + data[i].Nome_Disciplina + '</option>';
+                }
+                $("#Disciplina").html(m);
+            },
+        }).fail(function () {
+            ResetDropDownDisc();
+
+        });
+    }
+
+    //-- Carregar o dropdown Curso
+    $(".Id_Departamento").change(function () {
+        var id = $(this).val();
+        $.ajax({
+            type: "Get",
+            url: "https://localhost:44324/api/Departamento/DepartCursos/" + id,
+            datatype: "json",
+            success: function (data) {
+                var m = '<option value="-1">-- Selecione o Curso --</option>'
+                for (var i = 0; i < data.length; i++) {
+                    m += '<option value="' + data[i].Id_Curso + '"> ' + data[i].Nome_Curso + '</option>';
+                }
+                $("#Curso").html(m);
+            },
+        }).fail(function () {
+            ResetDropDown();
+        });
+    });
+    //-- Carregar o dropdown Curso
+    $("#Curso").change(function () {
+        var id = $(this).val();
+        if (id != "-1") {
+            CarregarDisciplina()
+        }
+        else {
+            ResetDropDownDisc();
+        }
+
+    });
+    //Limpar Dropdown Curso
+    function ResetDropDown() {
+
+        $("#Curso").empty();
+        var dp = '<option value="-1">----</option>'
+        $("#Curso").append(dp);
+        ResetDropDownDisc();
+
+    }
+    //Limpar Dropdown Curso
+    function ResetDropDownDisc() {
+        $("#Disciplina").empty();
+        var cc = '<option value="-1">----</option>'
+        $("#Disciplina").append(cc);
+    }
+
+    function ExibirAlerta() {
+        $("#DivAlerta").css("display", "block")
+    }
+
+    $("#btnX").click(function () {
+        $("#DivAlerta").fadeOut("slow");
+
+    })
+
+    function EsconderAlerta() {
+        $("#DivAlerta").css("display", "none")
+    }
+          
+           
+
+</script>

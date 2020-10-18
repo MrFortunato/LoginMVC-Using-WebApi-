@@ -1,0 +1,107 @@
+﻿@model Exame_Online.Models.DepartamentoAddModel
+@{
+    ViewData["Title"] = "Cadastrar Departamento";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<div class="page-header mt-0 shadow p-3">
+    <ol class="breadcrumb mb-sm-0">
+        <li class="breadcrumb-item"><a asp-action="Lista" asp-controller="Departamento">Listar</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cadastrar</li>
+    </ol>
+</div>
+<div class="container">
+    <div class="wapper-disciplina">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="mb-0"><b>Cadastrar</b> Departamento</h2>
+            </div>
+            <div class="card-body">
+
+                    <form autocomplete="off" method="post" asp-action="Cadastrar" asp-controller="Departamento">
+                        <div class="form-row">             
+                                @*---------- Iniciao da Div de notificação-----------------*@
+                                <div class="alert alert-danger mb-0 text-white text-center" style="padding:10px;" role="alert" asp-validation-summary="ModelOnly">
+                                    <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+                                    <span class="alert-inner--text"><strong>Alerta!</strong> !</span>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                @*---------- Fim da Div de notificação-----------------*@
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input hidden asp-for="Id_Departamento" class="form-control" />
+                                        <label asp-for="Nome_Departamento"></label>
+                                        <input asp-for="Nome_Departamento" class="form-control" id="departamento" />
+                                        <span id="error_Depart" asp-validation-for="Nome_Departamento" class="error_form"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <button id="btn_Add" type="submit" class="btn btn-success btn-block"><i class="fa fa-save"></i> Cadastrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+    $(function () {
+        var msg = '@ViewData["result"]';
+        if (msg == '1')
+        {
+            toastr.success("Cadastrado com sucesso!!!", "Departamento!!");
+            window.setTimeout(function () {
+                //Direcionar para lista dos Curso!! depois da Cadastrar
+                window.location.href = "@Url.Action("Lista", "Departamento")";
+            }, 500);
+        }
+    });
+
+    //Validar dados
+    function Validar(){
+        var v = true;
+        if ($("#departamento").val() == "") {
+            $("#error_Depart").html("Digite o Departamento");
+            $("#error_Depart").show();
+            v= false;
+
+        }
+        else {
+            $("#error_Depart").hide();
+            $("#error_Depart").html("");
+        };
+        return v;
+    }
+    //$("#btn_Add").click(function(){
+    //    var model = {
+    //        Nome_Departamento: $("#departamento").val()
+    //    };
+
+    //        var val = Validar()
+    //        if(val == false){
+    //            return false;
+    //        }
+
+    //    debugger
+    //        $.ajax({
+    //            url: "https://localhost:44377/Departamento/Cadastrar",
+    //            type: "Post",
+    //            dataType: "Json",
+    //            data: model,
+    //            success: function (data) {
+    //               debugger
+    //            }
+    //        })
+    //        .fail(function () {
+    //            swal('Oops...', 'Something went wrong with ajax !', 'error');
+    //        });
+
+    //})
+
+</script>

@@ -1,0 +1,421 @@
+﻿@model Exame_Online.ModelsView.RespostaModel
+@{
+    ViewData["Title"] = "Exame Online";
+    Layout = "~/Views/Shared/LayoutInicial.cshtml";
+
+}
+
+<div class="container" id="container">
+<div class="row">
+    @*-------------- A Div de Alerta ----------------*@
+    <div class="col-md-12" id="DivAlerta" style="display:none;">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong id="Texttutlo"><i class="fa fa-exclamation"></i></strong><a href="#" class="alert-link">Erro: </a> <span id="InfoTexto"></span>
+
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header" id="CardHeader">
+                <div class="clearfix" style="margin-bottom:3px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <h4><strong>Exame Online de : @Model.Disciplina</strong></h4>
+                                <address>
+                                    <strong><span id="Nr"></span><span id="Total"></span></strong><br>
+                                  
+                                </address>
+                            </div>
+                            <!------------- div Cronomento (Relogio) -->
+                            <div class="float-right text-right">
+                                <div id="countdown-container">
+                                    <div id="countdown">
+                                        <span>
+                                            <i class="fa fa-clock text-left"></i>
+                                        </span>
+                                        <span id="time"></span>
+                                    </div>
+                                </div><br>
+                                <strong><span id="TotalRespondidas"></span></strong>
+                            </div><!-- Fim  O Cronomento (Relogio) -->
+                        </div>
+                        <!-- end row -->
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="card_body">
+
+
+                @if (Model.Opcoes != null)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="">
+                                <p id="Questao"></p>
+                                <strong id="Texto_Pergunta">Leia com a atenção e responda a seguinte questão: </strong><br />
+                                <p id="PerguntaView"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <form name="Form_Respsota" id="Form_Respsota">
+                               
+                                <div id="RespostaCheckLista">
+                                <strong id="InfoResposta"></strong><br /> 
+                                <ol type="A" id="Lista"></ol> 
+                                </div>
+                                <input hidden id="testeId" name="Model.Id_Teste" value="@(Model.Id_Teste)" />
+                                <input hidden name="Model.Pergunta_Nr" value="@(Model.Pergunta_Nr)" />
+                                <input hidden id="Nr_Pergunta" />
+                                <input hidden id="TipoPergunta" />
+                            </form>
+                        </div>
+
+                        <div class="col-sm-12 " style="height:100px">
+                            <hr />
+                            <button type="button" class="btn btn-success btn-square mt-1 mb-1" id="submeter">
+                                <span class="btn-inner--icon"><i class="fe fe-check-square"></i></span>
+                                <span class="btn-inner--text">Submeter</span>
+                            </button>
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+            <div class="card-footer" id="CardFooter">
+                <div id="Paginacao"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalInstrucao" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">Instruções para o Teste</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">Regra 1</p><br />
+                <p class="mb-0">Regra 2</p><br />
+                <p class="mb-0">Regra 3</p><br />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i>Cancelar</button>
+                <a href="#" onclick="Contar(2)" class="btn btn-success btn-sm"><i class="fe fe-play mr-2"></i>Começar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        $('#RespostaTexto').keyup(function () {
+            $(this).val(($(this).val()).toUpperCase());
+        });
+    });
+
+    function upperCaseF(a) {
+        setTimeout(function () {
+            a.value = a.value.toUpperCase();
+        }, 1);
+    }
+
+    function Messagem() {
+        // Bloquer o Modal
+        $("#ModalInstrucao").modal({
+            backdrop: 'static'
+        })
+    }
+
+    function disableF5(e) { if ((e.which || e.keyCode) == 116 || (e.which || e.keyCode) == 82) e.preventDefault(); };
+
+    $(document).ready(function () {
+        $(document).on("keydown", disableF5);
+    });
+
+
+    $(document).ready(function TotalPergunta() {
+        Messagem();
+        var Id = $("#testeId").val();
+
+        $.ajax({
+            url: "/Exame/TotalPerguntas?Id=" + Id,
+            type: "Get",
+            dataType: "Json",
+            success: function (data) {
+                var dados = "";
+
+                if (data != null) {
+                    dados += '<nav aria-label="Page navigation example">'
+                    dados += '<ul class="pagination justify-content-center mb-0">'
+                    dados += ' <li class="page-item">'
+                    dados += ' <a class="page-link" href="#" tabindex="-1" href="#" onclick="Enviar(' + 0 + ')">'
+                    dados += ' <i class="fa fa-angle-left"></i>'
+                    dados += '<span class="sr-only">Retornar</span></a></li>'
+                    for (i = 0; i < data.length; i++) {
+                        dados += '<li class="page-item"><a class="page-link" href="#" id=nab  onclick="Selecionar(' + data[i].nrPergunta + "," + data[i].idTeste + ')">' + data[i].nrPergunta + '</a></li>'
+                    }
+                    dados += '<li class="page-item"><a class="page-link" href="#" onclick="Enviar(' + 1 + ')"><i class="fa fa-angle-right"></i>'
+                    dados += '<span class="sr-only">Avançar</span></a></li>'
+                    dados += '</ul ></nav>';
+
+                }
+                $("#Paginacao").html(dados);
+            }
+        })
+    })
+
+    // Selecionar Pergunta PRÓXIMA/ANTERIOR pergunta
+    function Selecionar(Id, Id_Teste) {
+
+        $.ajax({
+            url: "/Exame/SelecionarPertunta",
+            contentType: "application/html; charset=utf-8",
+            type: 'Get',
+            data: { nrP: Id, Id: Id_Teste },
+            dataType: 'Json',
+            success: function (resultado) {
+                //debugger
+                if (resultado != null) {
+              
+                    $("#PerguntaView").html(resultado.pergunta);
+                    $("#Nr").html("Pergunta Nº " + resultado.id_Pergunta);
+                    $("#Questao").html("Questão " + resultado.id_Pergunta);
+                    $("#Nr_Pergunta").val(+ resultado.id_Pergunta);
+                    $("#Total").html(" / " + resultado.total);
+                    $("#TotalRespondidas").html("Total Respondidas: " + resultado.totalRespondidas);
+                    TotalRespondidas
+
+                    Respostas(Id, Id_Teste);
+                }
+                else {
+                    alert("");// Sem dados
+                }
+            },
+            error: function (data, errorThrown) {
+                alert('request failed :' + errorThrown);
+            }
+        })
+
+    }
+    var mensagem;
+    var error_message = document.getElementById("InfoTexto");
+    function Enviar(Direcao) {
+
+
+        var Pertunta = $("#TipoPergunta").val()
+        if (Pertunta == "Única") {
+
+            var arr = $(':radio:checked').map(function () {
+                return this.value; // $(this).val()
+            }).get(); // Respostas Selecionadas
+
+        }
+        else {
+            var arr = $(':checkbox:checked').map(function () {
+                return this.value; // $(this).val()
+            }).get(); // Respostas Selecionadas
+
+        }
+
+        var Id = $("#testeId").val(); //  Teste
+        var Nr_P = $("#Nr_Pergunta").val(); // Nr Pergunta
+        var Texto = $("#RespostaTexto").val();// Resposta digitada pelo usuario
+        var IdEscolha = $("#EscolhaId").val();
+
+        $.ajax({
+            url: "/Exame/Add",
+            Type: "Get",
+            data: {
+                IdTeste: Id,// Id do Teste
+                IdOpcao: arr, // Id das respostas escolhidas (Array)
+                Nr_P: Nr_P,    // Numero da Pertunga pela ordem no teste
+                resposta: Texto, // A resposta digitada
+                Id: IdEscolha,  // Id da resposta digite do Sistema (NÃO DO USUÁRIO)
+                direcao: Direcao
+            },
+            dataType: "Json",
+            contentType: "application/html;charset=utf-8",
+            traditional: true,
+            success: function (resultado) {
+              
+                if (resultado != null) {
+                    switch (resultado) {
+                        case "0":
+                            Nr_P = parseInt(1);
+                            Selecionar(Nr_P, Id);
+                            break
+                        case "gsgsg":
+                            Nr_P = parseInt(Nr_P) + parseInt(1);
+                            Selecionar(Nr_P, Id);
+                            break;
+                        case "Erro":
+                            mensagem = "Ref: 000x1";
+                            EsconderAlerta();
+                            error_message.innerHTML = mensagem;
+                            ExibirAlerta();
+                            break;
+                        default:
+                            Nr_P = parseInt(resultado);
+                            Selecionar(Nr_P, Id);
+                            break;
+                    }
+
+
+                }
+
+            },
+            error: function (data, errorThrown) {
+                alert('request failed :' + errorThrown);
+            }
+
+        })
+
+    }
+    // Função para exibir as resposta de modo que usuário possa fazer a sua escolha
+    function Respostas(Id, Id_Teste) {
+        $.ajax({
+            url: "/Exame/Respostas",
+            contentType: "application/html; charset=utf-8",
+            type: 'Get',
+            data: { nrP: Id, Id: Id_Teste },
+            dataType: 'Json',
+            success: function (resultado) {
+                var dados = "";
+                if (resultado != null) {
+                    for (i = 0; i < resultado.length; i++) {
+                        $("#TipoPergunta").val(resultado[i].tipoPergunta);// TextBox Escondida
+                        if (resultado[i].selecionado != null) {
+
+                            switch (resultado[i].tipoPergunta) {
+                                case "Única":
+                                    $("#InfoResposta").html("Escolhe a resposta correcta!!");
+                                    dados += '<li>'
+                                    dados += '<label class="container-r">' + resultado[i].respostaView
+                                    dados += '<input type="radio" name="Opcoes[]" Checked value="' + resultado[i].id_Escolha + '"/>'
+                                    dados += '<span class="checkmark"></span>'
+                                    dados += '</label>'
+                                    dados += '</li>';
+                                    break;
+                                case "Texto":
+                                    $("#InfoResposta").html("Digite a resposta correcta!!");
+                                    dados += '<input type="text" id="RespostaTexto" onkeydown="upperCaseF(this)" class="form-control" name="Opcoes[]" value="' + resultado[i].respostaTexto + '"/><br/> ';
+                                    dados += '<input type="hidden"  id="EscolhaId" class="form-control" name="Opcoes[]" value="' + resultado[i].id_Escolha + '"/><br/> ';
+                                    break;
+                                case "Multiplas":
+                                    $("#InfoResposta").html("Escolhe as respostas correctas!!");
+                                    dados += '<li>'
+                                    dados += '<label class="container-c">' + resultado[i].respostaView
+                                    dados += '<input type="checkbox" name="Opcoes[]" Checked value="' + resultado[i].id_Escolha + '"/>'
+                                    dados += '<span class="checkmark"></span>'
+                                    dados += '</label>'
+                                    dados += '</li>';
+                                    break;
+                                default:
+                                    dados += '<input type="text" name="Opcoes[]" value="' + resultado[i].id_Escolha + '"/> ' + resultado[i].respostaView + '<br/> ';
+                            }
+
+                        }
+                        else {
+
+                            switch (resultado[i].tipoPergunta) {
+                                case "Única":
+                                    dados += '<li>'
+                                    dados += '<label class="container-r">' + resultado[i].respostaView
+                                    dados += '<input type="radio" name="Opcoes[]"  value="' + resultado[i].id_Escolha + '"/>'
+                                    dados += '<span class="checkmark"></span>'
+                                    dados += '</label>'
+                                    dados += '</li>';
+                                    break;
+                                case "Texto":
+                                    dados += '<input type="text"  onkeydown="upperCaseF(this)" id="RespostaTexto" class="form-control" name="Opcoes[]" /><br/>';
+                                    dados += '<input type="hidden" id="EscolhaId" class="form-control" name="Opcoes[]" value="' + resultado[i].id_Escolha + '"/><br/> ';
+                                    break;
+                                case "Multiplas":
+                                    dados += '<li>'
+                                    dados += '<label class="container-c">' + resultado[i].respostaView
+                                    dados += '<input type="checkbox" name="Opcoes[]" value="' + resultado[i].id_Escolha + '"/>'
+                                    dados += '<span class="checkmark"></span>'
+                                    dados += '</label>'
+                                    dados += '</li>';
+                                    break;
+                                default:
+                                    dados += '<input type="text"  name="Opcoes[]" value="' + resultado[i].id_Escolha + '"/> < br /> ';
+                                    break;
+                            }
+
+                        }
+
+                        $("#Lista").html(dados);
+                    }
+                }
+                else {
+                    Alert("");// Sem dados
+                }
+            },
+            error: function (data, errorThrown) {
+                alert('request failed :' + errorThrown);
+            }
+        })
+
+    }
+
+    // Método contagem regressiva do Tempo
+    function startTimer(duracao, display) {
+        var timer = duracao, minutos, segundos, display;
+        var d = setInterval(function () {
+         
+            minutos = parseInt(timer / 60, 10)
+            segundos = parseInt(timer % 60, 10);
+
+            minutos = minutos < 10 ? "0" + minutos : minutos;
+            segundos = segundos < 10 ? "0" + segundos : segundos;
+
+            display.text("00: " + minutos + ": " + segundos);
+
+            if (segundos === 59) {
+              
+                $('.modal-backdrop').remove();
+                $('#ModalInstrucao-backdrop').remove()
+                $('#ModalInstrucao').hide();
+                $('#ModalInstrucao').remove()
+                $(document.body).removeClass("modal-open");
+                Selecionar(1, $("#testeId").val());
+            }
+   
+             if (--timer < 0|| minutos === 00 && segundos === 00) {
+               
+                 timer = duracao;
+                 clearInterval(d);
+            }
+        }, 1000);
+    }
+    // Função que chama o método para contagem
+    function Contar(Id) {      
+        var Minutos = 60 * Id,
+         display = $('#time');
+        startTimer(Minutos, display);
+          
+    };
+
+    function ExibirAlerta() {
+        $("#DivAlerta").css("display", "block")
+    }
+
+    function EsconderAlerta() {
+        $("#DivAlerta").css("display", "none")
+    }
+
+</script>
+
+

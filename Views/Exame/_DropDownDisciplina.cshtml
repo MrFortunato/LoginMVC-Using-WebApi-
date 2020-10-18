@@ -1,0 +1,10 @@
+﻿@if (ViewBag.Disciplinas != null)
+{
+    <option value="">-- Selecione a Disciplina --</option>
+    foreach (var item in ViewBag.Disciplinas)
+    {
+        <option value="@item.Value">
+            @item.Text
+        </option>
+    }
+}

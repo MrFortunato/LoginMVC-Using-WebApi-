@@ -1,0 +1,111 @@
+﻿@model Exame_Online.Models.CursoAddModel
+@{
+    ViewData["Title"] = "Cadastrar Curso";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        var msg = '@ViewData["result"]';
+        if (msg == '1')
+        {
+            toastr.success("Cadastrado com sucesso!!!", "Curso!!");
+            window.setTimeout(function () {
+                //Direcionar para lista dos Curso!! depois da Cadastrar
+                window.location.href = "@Url.Action("Lista", "Curso")";
+            }, 500);
+        }
+    });
+</script>
+<div class="page-header mt-0 shadow p-3">
+    <ol class="breadcrumb mb-sm-0">
+        <li class="breadcrumb-item"><a asp-action="Lista" asp-controller="Curso">Listar</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cadastrar</li>
+    </ol>
+</div>
+<div class="container">
+    <div class="wapper-disciplina">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="mb-0"><b>Cadastrar</b> Curso</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <form asp-action="Cadastrar" asp-controller="Curso" method="post" autocomplete="off">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                @*---------- Iniciao da Div de notificação-----------------*@
+                                <div class="alert alert-danger mb-0 text-white text-center" style="padding:10px;list-style-type: none;" role="alert" asp-validation-summary="ModelOnly">
+                                    <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+                                    <span class="alert-inner--text"><strong>Alerta!</strong> !</span>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                @*---------- Fim da Div de notificação-----------------*@
+                            </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input hidden asp-for="Id_Curso" class="form-control" />
+                                        <label asp-for="Nome_Curso"></label>
+                                        <input asp-for="Nome_Curso" class="form-control" />
+                                        <span asp-validation-for="Nome_Curso" class="error_form"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label> Descrição Departamento</label>
+                                        <select asp-for="Id_Departamento" class="form-control" id="Depart"
+                                                asp-items="@ViewBag.Departamentos">
+                                            <option value="">-- Selecione Departamento --</option>
+                                        </select>
+                                        <span asp-validation-for="Id_Departamento" class="error_form"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success btn-block"><i class="fa fa-save"></i> Cadastrar</button>
+                                    </div>
+                                </div>
+                            </div>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    $(document).ready(function () {
+
+    })
+    // Carregar DropdownDepartamento
+    //function CarregarDepartamento() {
+    //    $.ajax({
+    //        url: "https://localhost:44308/api/Departamento/GetAll",
+    //        type: "Get",
+    //        dataType: "Json",
+    //        success: function (data) {
+
+    //            var html = '<option value="-1">-- Selecione o Departamento --</option>'
+    //            for (var i = 0; i < data.length; i++) {
+    //                html += '<option value="' + data[i].Id_Departamento + '"> ' + data[i].Nome_Departamento + '</option>';
+    //            }
+    //            $("#Depart").html(html);
+    //        }
+    //    })
+    //        .fail(function () {
+    //            swal('Oops...', 'Erro !', 'error');
+    //        });
+    //}
+
+    //Limpar Dropdown Departamento
+    //function ResetDropDown() {
+    //    $("#Depart").empty();
+    //    var dp = '<option value="-1">-- Selecione o Departamento --</option>'
+    //    $("#Depart").append(dp);
+    //}
+</script>

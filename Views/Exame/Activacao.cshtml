@@ -1,0 +1,396 @@
+﻿@model Exame_Online.ModelsView.ExameActivacaoModel
+@{
+    ViewData["Title"] = "Activar Exames";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+@*<div class="container-fluid pt-8">*@
+<div class="page-header mt-0 shadow p-3">
+    <ol class="breadcrumb mb-sm-0">
+        <li class="breadcrumb-item"><a href="#">Exame</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Activação</li>
+    </ol>
+
+    <div class="form-group btn-group mb-0">
+        <select asp-for="Sala" name="Periodo" class="form-control">
+            <option value="">--Selecione --</option>
+            <option value="1">Única</option>
+            <option value="2">Colectiva</option>
+        </select>
+        <span class="error_form"></span>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="float-left">
+                            <h2 class="mb-0">Pesquisar Candidatos</h2>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <!----------- div Cronomento (Relogio)-->
+                        <div class="form-group">
+                            <div class="float-right text-right">
+                                <button class="btn btn-outline-default " id="btn_Pesquisar"><i class="fa fa-search"></i> Pesquisar</button>
+                                <!---------end *-->
+                            </div>  <!---------end Fim  O Cronomento (Relogio)*-->
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="form-group">
+                            <select class="form-control" id="Id_Departamento" name="Departamento"
+                                    asp-items="@ViewBag.Departamentos">
+                                <option value="">-- Selecione o ramo --</option>
+                            </select>
+                            <span asp-validation-for="Id_Curso" class="error_form"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <select asp-for="Id_Curso" class="form-control" id="Curso" name="curso"
+                                    asp-items="@ViewBag.Cursos">
+                                <option value="">-- Selecione o curso --</option>
+                            </select>
+                            <span id="erro_Curso" asp-validation-for="Id_Curso" class="error_form"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <select class="form-control" id="Disciplina" name="Disciplina"
+                                    asp-items="@ViewBag.Disciplinas">
+                                <option value="">-- Selecione a Disciplina --</option>
+                            </select>
+                            <span id="erro_Disciplina" asp-validation-for="Id_Disciplina" class="error_form"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <select asp-for="Sala" id="IdSala" name="Sala" class="form-control">
+                                <option value="">--Selecione a Sala --</option>
+                                <option value="1">Sala 1</option>
+                                <option value="2">Sala 2</option>
+                            </select>
+                            <span id="erro_Sala" class="error_form"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 ">
+                        <div class="form-group">
+                            <div class="wd-200 mg-b-30">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+                                        </div>
+                                    </div><input asp-for="Dt" id="Data" name="Daata" class="form-control datepicker" placeholder="DD/MM/YYYY" type="text">
+                                </div>
+                            </div>
+                            <span id="erro_Data" class="error_form"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="wd-200 mg-b-30">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-clock tx-16 lh-0 op-6"></i>
+                                        </div>
+                                    </div><input class="form-control" id="relogio" name="relogio" placeholder="Horário" type="text">
+                                </div>
+                            </div>
+                            <span id="erro_horario" class="error_form"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row" id="div_Exames">
+                    <div class="col-md-12">
+                        <div class="table-responsive" style="margin-bottom:20px;">
+                            <div class="table-wrapper">
+                                <div class="table-title">
+                                </div>
+                            </div>
+                            <table class="table table-striped table-hover" id="Tb_Exames">
+                                <thead>
+                                    <tr>
+
+                                        <th>#</th>
+                                        <th>Nome Completo</th>
+                                        <th>Curso</th>
+                                        <th>Disciplina</th>
+                                        <th>Data</th>
+                                        <th class="text-center"><input type="checkbox" class="custom-checkbox" id="select_all" /></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<!-- Date Picker-->
+<script src="~/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="~/lib/moment.js/moment.min.js"></script>
+<script src="~/assets/js/bootstrap-datetimepicker.min.js"></script>
+<script src='~/assets/plugins/fullcalendar/fullcalendar.min.js'></script>
+<script type="text/javascript">
+
+    $('.datepicker').datepicker({
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        format: 'dd/mm/yyyy',
+        language: "pt-br",
+    });
+    $('#relogio').datetimepicker({
+        stepping: 15,//#cada 15 min
+        enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16,],
+        format: 'H:mm',
+
+
+    });
+
+    // Função do dropdown Opção 1
+    $(document).ready(function () {
+        $("#Id_Departamento").change(function () {
+            if ($(this).find(':selected').text() != "-- Selecione o ramo --") {
+                var Id = $(this).val();
+                $.ajax({
+                    type: "Post",
+                    url: "/Inscricao/GetCurso?Id=" + Id,
+                    contentType: "html",
+                    success: function (response) {
+                        if (response != null) {
+                            $("#Curso").empty();
+                            $("#Curso").append(response);
+                        }
+                        else {
+                            LimparDropdownCurso();
+                        }
+
+                    }
+                })
+            }
+            else {
+                LimparDropdownCurso();
+            }
+        })
+
+        $("#Curso").change(function () {
+            if ($(this).find(':selected').text() != "-- Selecione o curso --") {
+                var Id = $(this).val();
+                $.ajax({
+                    type: "Post",
+                    url: "/Exame/GetDisciplina?Id=" + Id,
+                    contentType: "html",
+                    success: function (response) {
+                        if (response != null) {
+                            $("#Disciplina").empty();
+                            $("#Disciplina").append(response);
+                        }
+                        else {
+                            LimparDropdownDisciplina();
+                        }
+
+                    }
+                })
+            }
+            else {
+                LimparDropdownDisciplina();
+            }
+        })
+    })
+
+    $("#btn_Pesquisar").click(function () {
+        Listar_Testes();
+    })
+
+    function Validar() {
+        var v = true;
+        var curso = document.getElementById("Curso");
+        var disciplina = document.getElementById("Disciplina");
+        var data = document.getElementById("Data");
+        var sala = document.getElementById("IdSala");
+        var hora = document.getElementById("relogio");
+
+        if (curso == "") {
+            $("#erro_Curso").show();
+            $("#erro_Curso").html("Selecione o curso");
+            v = false;
+        }
+        else {
+            $("#erro_Curso").hide();
+        }
+        if (disciplina == "") {
+            $("#erro_Disciplina").show();
+            $("#erro_Disciplina").html("Selecione a disciplina");
+            v = false;
+        }
+        else {
+            $("#erro_Disciplina").hide();
+        }
+        if (sala == "") {
+            $("#erro_Sala").show();
+            $("#erro_Sala").html("Selecione a sala");
+            v = false;
+        }
+        else {
+            $("#erro_Sala").hide();
+        }
+        if (data == "") {
+            $("#erro_Data").show();
+            $("#erro_Data").html("Selecione a Data");
+            v = false;
+        }
+        else {
+            $("#erro_Data").hide();
+        }
+        if (hora == "") {
+            $("#erro_horario").show();
+            $("#erro_horario").html("Selecione a hora");
+            v = false;
+        }
+        else {
+            $("#erro_Sala").hide();
+        }
+        return v;
+    }
+
+    function Listar_Testes() {
+
+        var disciplina = $("#Disciplina").val();
+        var curso = $("#Curso").val();
+        var data = $("#Data").val();
+        var sala = $("#IdSala").val();
+        var hora = $("#relogio").val();
+
+        var V = Validar();
+        if (V == false) {
+            return false;
+        }
+
+        $.ajax({
+            url: "/Exame/SelecionatTeste",
+            contentType: "application/json; charset=utf-8",
+            type: "GET",
+            data: {
+                IdDisciplina: disciplina,
+                IdCurso: curso,
+                Data: data,
+                IdSala: sala,
+                Hora: hora
+            },
+            dataType: "JSON",
+            success: function (data) {
+                debugger
+                var html;
+                $("#Tb_Exames tbody").empty();
+                if (data == "2") {
+                    alert("2");
+                }
+                else if (data == "3") {
+                    alert("3");
+                }
+                else {
+                    for (i = 0; i < data.length; i++) {
+                        html = ''
+                        var estado = data[i].selecionado;
+
+                        html = '<tr>'
+
+                            + '<td>' + data[i].id_Teste + '</td>'
+                            + '<td>' + data[i].nome_Completo + '</td>'
+                            + '<td>' + data[i].curso + '</td>'
+                            + '<td>' + data[i].disciplina + '</td>'
+                            + '<td>' + data[i].dt_Agendamento + '</td>'
+                        if (data[i].selecionado === "1") {
+                            html += '<td class="text-center"><input type="checkbox" id="" class="custom-checkbox" checked /></td>'
+                        }
+                        else {
+                            html += '<td class="text-center"><input type="checkbox" class="custom-checkbox" id="" /></td>'
+                        }
+
+                        + '</tr>';
+                        $("#Tb_Exames tbody").append(html);
+                        //carrega();
+
+                    }
+
+                }
+
+            },
+
+            error: function () {
+                swal('Oops...', 'Something went wrong with ajax !', 'error');
+            }
+
+        })
+
+
+    }
+
+    $('#select_all').click(function (event) {
+        if (this.checked) {
+            // Iterate each checkbox
+            $(':checkbox').each(function () {
+                this.checked = true;
+            });
+        }
+        else {
+            $(':checkbox').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+    //function carrega() {
+    //    var v = "";
+    //    $("#Tb_Exames tbody tr").each(function () {
+    //        $(this).find("td:eq(5)").each(function () {
+    //            v = $(this).text();
+    //            debugger
+    //            if (v ===1) {
+    //                $("#Tb_Exames td#td_Selecionar").html('<a title="Editar" class="btn btn-success" href="#">Edit</a>');
+
+    //            }
+    //            else {
+    //                $("#Tb_Exames td#td_Selecionar").html('<a title="Eliminar" class="btn btn-danger" href="#">Edit</a>');
+    //            }
+    //        })
+    //    })
+    //}
+
+    function LimparDropdownCurso() {
+
+        $("#Curso").empty();
+        var dados = '<option value="">-- Selecione o curso --</option>';
+        $("#Curso").append(dados);
+    }
+    function LimparDropdownDisciplina() {
+
+        $("#Disciplina").empty();
+        var dados = '<option value="">-- Selecione a Disciplina --</option>';
+        $("#Disciplina").append(dados);
+    }
+
+
+
+</script>

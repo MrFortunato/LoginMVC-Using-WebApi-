@@ -1,0 +1,62 @@
+﻿@model Exame_Online.ModelsView.RespostaModel
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="">
+                <strong id="Texto_Pergunta">Leia com a atenção e reponda a seguinte questão: </strong><br />
+                <h3>@Model.Pergunta ?</h3>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <form name="Form_Respsota" id="Form_Respsota" asp-controller="Exame" asp-action="Postar" method="get">
+
+
+                <div> Escolhe a resposta correcta!!</div>
+                @switch (Model.TipoPergunta)
+                {
+                    case "Única":
+                        <div>
+                            <ol>
+                                @for (int i = 0; i < Model.Opcoes.Count; i++)
+                                {
+                                    <li>
+
+                                        <input type="hidden" name="Escolhas[@i].Id_Escolha" value="@Model.Opcoes[i].Id_Opcao" />
+                                        <input type="radio" name="Escolhas[@i].Selecionado" />
+                                        <label>   @Model.Opcoes[i].Respostax</label>
+
+                                    </li>
+                                }
+                            </ol>
+                        </div>
+                        break;
+                    case "Multiplas":
+                        <div> Escolhe todas as respostas correctas!!</div>
+                        <div>
+
+                            <ol type="a">
+                                @for (int i = 0; i < Model.Opcoes.Count; i++)
+                                {
+
+                                    <li>
+                                        <input type="hidden" name="Escolhas[@i].Id_Escolha" value="@Model.Opcoes[i].Id_Opcao)" />
+                                        <input type="checkbox" name="Escolhas[@i].Selecionado" />
+                                        <label>@Model.Opcoes[i].Respostax</label>
+                                    </li>
+                                }
+                            </ol>
+                        </div>
+                        break;
+                }
+                <input id="Pagina" name="PaginaDirecao" value="avancar" />
+                <input hidden name="Model.Id_Teste" value="@(Model.Id_Teste)" />
+                <input hidden name="Model.Pergunta_Nr" value="@(Model.Pergunta_Nr)" />
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/plugins/jquery/dist/jquery.min.js"></script>

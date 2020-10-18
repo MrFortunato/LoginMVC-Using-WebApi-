@@ -1,0 +1,467 @@
+﻿@model Exame_Online.ModelsView.CandidatoViewModel
+@{
+    ViewData["Title"] = "Perfil do Candidato";
+    Layout = "~/Views/Shared/LayoutInicial.cshtml";
+}
+
+<div class="container" id="PerfilBody">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-profile  overflow-hidden">
+                <div class="card-body text-center cover-image" data-image-src="../assets/img/profile-bg.jpg">
+                    <div class=" card-profile">
+                        <div class="row justify-content-center">
+                            <div class="">
+                                <div class="">
+                                    <a href="#">
+                                        @if (Model.Foto == null)
+                                        {
+                                            <img src="~/Imagens/user.jpg" class="rounded-circle" alt="profile">
+
+                                        }
+                                        else
+                                        {
+                                            <img src="~/Imagens/@Model.Foto" width="120" height="120" class="rounded-circle" alt="profile">
+                                        }
+
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="mt-3 text-black-50">@Model.Nome_Completo</h3>
+                    <p class="mb-4 text-black-50">Candidato</p>
+                    <a href="#" class="btn btn-success btn-sm"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Editar Perfil</a>
+                </div>
+                <div class="card-body">
+                    <div class="nav-wrapper p-0">
+                        <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0 mt-md-2 mt-0 mt-lg-0" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="false"><i class="fas fa-home mr-2"></i>Info. Pessoais</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0 mt-md-2 mt-0 mt-lg-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="fas fa-user mr-2"></i>Friends</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0 active mt-md-2 mt-0 mt-lg-0" id="tabs-icons-text-4-tab" data-toggle="tab" href="#tabs-icons-text-4" role="tab" aria-controls="tabs-icons-text-4" aria-selected="true"><i class="fas fa-newspaper mr-2"></i>Candidaturas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-0 mb-md-0 mt-md-2 mt-0 mt-lg-0" id="tabs-icons-text-5-tab" data-toggle="tab" href="#tabs-icons-text-5" role="tab" aria-controls="tabs-icons-text-5" aria-selected="false"><i class="fas fa-cog mr-2"></i> Informações</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow ">
+                <div class="card-body pb-0">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade " id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                            <h2>About Me</h2>
+                            <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+                            <div class="table-responsive border ">
+                                <table class="table row table-borderless w-100 m-0 ">
+                                    <tbody class="col-lg-6 p-0">
+                                        <tr>
+                                            <td><strong>Nome Completo:</strong> @Model.Nome_Completo </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Naturalidade :</strong> USA</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Languages :</strong> English, German, Spanish.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>DOB :</strong> @Model.Telf</td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody class="col-lg-6 p-0">
+                                        <tr>
+                                            <td><strong>Perfil :</strong> Candidato</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Website :</strong> ansta.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Email :</strong> coristover@ansta.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Phone :</strong> @Model.Telf</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <input hidden id="Id_DadosPessoais" value="@Model.Id" />
+                            <div class="media-heading mt-3">
+                                <h3><strong>Biography</strong></h3>
+                            </div>
+                            <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus</p>
+                            <p class="mb-4">because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure.</p>
+                        </div>
+                        <div aria-labelledby="tabs-icons-text-2-tab" class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel">
+
+                            <div class="row justify-content-md-center">
+                                <div class="col-xl-4">
+                                    <div class="card shadow">
+                                        <div class="card-header border-bottom-0" style="background-color:#ffd800">
+                                            <h6 class="text-uppercase text-muted ls-1 mb-1">Exame</h6>
+                                            <h2 class="mb-0">Língua Portuguesa</h2>
+                                        </div>
+                                        <table class="table card-table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Estado:</td>
+                                                    <td class="text-right">
+                                                        <span class="badge badge-primary">Inactivo</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Duração:</td>
+                                                    <td class="text-right">
+                                                        <span class="badge badge-warning">5 min</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Total Perguntas:</td>
+                                                    <td class="text-right">
+                                                        <span class="badge badge-danger">15</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Data:</td>
+                                                    <td class="text-right">
+                                                        <a href="#" class="btn btn-success btn-sm">Agendar</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td>Cotação Final:</td>
+                                                    <td class="text-right"><h2 class="mb-0"> 0 Val</h2></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show active " id="tabs-icons-text-4" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab">
+                            <div class="row" id="div_Candidaturas">
+                                <div class="col-md-12">                   
+                                        <div class="table-responsive" style="margin-bottom:20px;">
+                                        <div class="table-wrapper">
+                                            <div class="table-title">                                                                                          
+                                                   <h2>Minhas <b>Candidaturas</b></h2>                                                                                            
+                                                </div>
+                                            </div>                               
+                                            <table class="table table-striped table-hover" id="tbCandidato">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Ramo</th>
+                                                        <th>1ª Opção</th>
+                                                        <th>2ª Opcão</th>
+                                                        <th>Estado</th>
+                                                        <th class="text-center">Operação</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>                  
+                                    </div>
+                                </div>
+                            <div class="row justify-content-md-center" id="div_Testes">
+                            </div>
+                            <div class="form-group" id="div_btn">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tabs-icons-text-5" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab">
+                            <p>Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+                            <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus</p>
+                            <p class="mb-4">because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*</div>*@
+</div>
+
+<!-- Modal -->
+
+<div class="modal fade" id="Modal_Agendamento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            @*<div class="modal-header">*@
+                @*<h2 class="modal-title" id="largeModalLabel">Novo Agendamento</h2>*@
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>*@
+            @*</div>*@
+            <div class="modal_body">
+                <div class="card-body">
+                    <div class="table-responsive" style="margin-bottom:20px;">
+                        <div class="table-wrapper">
+                            <div class="table-title">
+                            </div>
+                        </div>
+                        <table class="table table-striped table-hover" id="tbAgendamentos">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Horário</th>
+                                    <th scope="col">Vagas</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Operação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        Carergar_Candidaturas();
+    });
+    // Função pra listar a datas de Exames disponiveis
+    function AddAgenda(id) {
+        $.ajax({
+            url: "https://localhost:44324/api/Candidatura/ListarAgendamentos/"+id,
+            type: "Get",
+            //contentType: "application/html; charset=utf-8",
+            dataType: 'json',
+            data: {},
+            success: function (data) {
+                var html;
+                $("#tbAgendamentos tbody").empty();
+                if (data != null) {
+                   debugger
+                    $.each(data, function (a, item)
+                    {
+                        html='<tr>'
+                            + '<td>' + item.Id_Agendamento + '</td>'
+                            + '<td><strong class="text-success">'+item.Data_Real+'</strong></td>'
+                            + '<td>' +item.Hora +' Horas</td>'
+                            + '<td><strong>' + item.Vagas + '</strong></td>'
+                        if (item.Estado === true && item.Vagas > 0 ) {
+                            html += '<td>Activo</td>'
+                                +'<td><a class="btn btn-outline-success btn-sm" href="#" onclick="Agendar('+item.Id_Agendamento + ')"><i class="fa fa-calendar-check"></i> Agendar</a>'
+                                +'</td >'
+     
+                        }
+                        else {
+                            html +='<td>Inactivo</td>'
+                                 +'<td class="text-center">'
+                                 +'</td >'
+
+                        }
+                            +'</tr>';
+                        $("#tbAgendamentos tbody").append(html);
+                    });
+                   
+                    //$(".modal_body").html(resposta)
+                    $("#Modal_Agendamento").modal("show");
+                }
+            },
+            error: function () {
+                swal('Oops...', 'Something went wrong with ajax !', 'error');
+            }
+        })
+    }
+
+    function CancelarCandidatura(Id) {
+        swal({
+            icon: "warning",
+            title: "Deseja Cancelar a Candidatura?",
+            text: "A Candidatura será eliminada definitivamente do sistema",
+            type: 'warning',
+
+            buttons: {
+                cancel: true,
+                confirm: "Confirmar",
+            }
+        }).then((Apagar) => {
+            if (Apagar) {
+                $.ajax({
+                    url: "/Candidatura/Deletar?Id=" + Id,
+                    type: "Delete",
+                    data: {},
+                    dataType: 'json'
+                })
+                    .done(function (data) {
+                        if (data == "1") {
+                            toastr.success("Deletado com sucesso!!!", "Disciplina");
+                            $("#TbDisciplina").DataTable().ajax.reload();
+                        } else {
+                            toastr.error("Erro ao Eliminar!!!", "Erro!!");
+                        }
+
+                    })
+                    .fail(function () {
+                        swal('Oops...', 'Something went wrong with ajax !', 'error');
+                    });
+            }
+
+        })
+
+    }
+
+
+    function Carergar_Candidaturas() {
+        var id = $("#Id_DadosPessoais").val();
+        $.ajax({
+            url: "https://localhost:44324/api/Candidatura/GetById/" + id,
+            type: "GET",
+            data: {},
+            dataType: "JSON",
+            success: function (data) {
+                       debugger
+                var html;
+                $("#tbCandidato tbody").empty();
+
+                $.each(data, function (i, item) {
+                  html = '<tr>'
+                        + '<td>'+ item.Id_Candidato +'</td>'
+                        + '<td>' + item.Ramo + '</td>'
+                        + '<td>' + item.Curso + '</td>'
+                      + '<td>' + item.Opcao2 + '</td>'
+
+                    if (item.Estado === true) {
+                        html+= '<td>Activo</td>'
+                            + '<td class="text-center"><a href="#" onclick="Carreregar_Exames(' + item.Id_Candidato + ')" class="btn btn-success btn-sm"><i class="fas fa-eye"></i> Detalhes</a>'
+                            + '<a href= "#" onclick = "CancelarCandidatura(' + item.Id_Candidato + ')" class="btn btn-danger btn-sm" ><i class="fa fa-trash"></i> Cancelar</a>'
+                            + '</td >'
+                            //+ '</tr>';
+                    }
+                    else {
+                        html +='<td>Inactivo</td>'
+                            + '<td class="text-center">'
+                            + '</td >'
+
+                    }
+
+                        + '</tr>';
+
+                });
+                $("#tbCandidato tbody").append(html);
+            },
+
+            error: function () {
+                swal('Oops...', 'Something went wrong with ajax !', 'error');
+            }
+        })
+    }
+
+    function Carreregar_Exames(id) {
+
+        $.ajax({
+            url: "https://localhost:44324/api/Candidatura/Testes/" + id,
+            type: "GET",
+            data: {},
+            dataType: "JSON",
+            success: function (data) {
+                debugger
+                div_btn
+                $('#div_btn').empty();
+                $('#div_Testes').empty();
+                var btn = '';
+                var dados = '';
+                for (var i = 0; i < data.length; i++) {
+                    dados+='<div class="col-xl-4">'
+                    dados+= '<div class="card shadow">'
+                    dados+= '<div class="card-header border-bottom-0">'
+                    dados+= '<h6 class="text-uppercase text-muted ls-1 mb-1">Exame</h6>'
+                    dados+= '<h2 class="mb-0">' +data[i].Disciplina + '</h2></div>'
+                    dados+= '<table class="table card-table">'
+                    dados+= '<tbody>'
+
+                    if (data[i].Estado === "true" && data[i].DataAgendamento == "" ) {
+                        dados += '<tr>'
+                        dados += '<td>Estado:</td>'
+                        dados += '<td class="text-right">'
+                        dados += '<span class="badge badge-success">Activo</span>'
+                        dados += '</td>'
+                        dados += '</tr>'
+                        dados += '<tr>'
+                        dados += '<td>Data:</td>'
+                        dados += '<td class="text-right">'
+                        dados += '<a href="#" onclick="AddAgenda(' + data[i].Id_Teste + ')" class="btn btn-success btn-sm"><i class="fa fa-calendar-check"></i> Agendar</a>'
+                        dados += '</td>'
+                        dados += '</tr>'
+
+                    }
+                    else if (data[i].Estado === "true" && data[i].DataAgendamento != "") {
+                        dados += '<tr>'
+                        dados += '<td>Estado:</td>'
+                        dados += '<td class="text-right">'
+                        dados += '<span class="badge badge-success">Activo</span>'
+                        dados += '</td>'
+                        dados += '</tr>'
+                        dados += '<tr>'
+                        dados += '<td>Data:</td>'
+                        dados += '<td class="text-right">'
+                        dados += '<strong>'+data[i].DataAgendamento+'</strong>'
+                        dados += '</td>'
+                        dados += '</tr>'
+                    }
+                    else {
+                        dados += '<tr>'
+                        dados += '<td>Estado:</td>'
+                        dados += '<td class="text-right">'
+                        dados += '<span class="badge badge-primary">Inactivo</span>'
+                        dados += '</td>'
+                        dados += '</tr>'
+
+                    }
+
+                    dados += '<td>Duração:</td>'
+                    dados += '<td class="text-right">'
+                    dados +='<span class="badge badge-warning">' +data[i].Tempo + ' min</span>'
+                    dados += '</td>'
+                    dados += '</tr>'
+                    dados += '<tr>'
+                    dados += '<td>Total Perguntas:</td>'
+                    dados += '<td class="text-right">'
+                    dados += '<span class="badge badge-danger">' +data[i].TotalPeruntas + '</span>'
+                    dados += '</td>'
+                    dados += '</tr>'
+
+
+                    dados += '</tbody>'
+                    dados += '<tfoot>'
+                    dados += '<tr>'
+                    dados += '<td>Cotação Final:</td>'
+                    dados += '<td class="text-right"><h2 class="mb-0"> 0 %</h2></td>'
+                    dados += '</tr>'
+                    dados += '</tfoot>'
+                    dados += '</table>'
+                    dados += '</div>'
+                    dados += '</div>';
+                    btn ='<a  class="btn btn-primary btn-outline-default btn-sm" href="#" onclick="Voltar()" ><i class="fa fa-backward"></i>Voltar</a>'
+
+                }
+                $('#div_btn').append(btn).fadeIn("slow");
+                $('#div_Testes').append(dados).fadeIn("slow");;
+                $("#div_Candidaturas").fadeOut("slow");
+
+            },
+            error: function () {
+                swal('Oops...', 'Api não disponível !', 'error');
+            }
+        })
+    }
+    function Voltar(){
+        $("#div_Candidaturas").fadeIn("slow");
+        $('#div_Testes').fadeOut("slow");
+        $('#div_btn').fadeOut("slow");
+    }
+</script>

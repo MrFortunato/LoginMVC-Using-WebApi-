@@ -1,0 +1,310 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<Exame_Online.Data.Entidades.IdentyModel.Usuario> _signInManager;
+@inject UserManager<Exame_Online.Data.Entidades.IdentyModel.Usuario> _userManager;
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Start your development with a Dashboard for Bootstrap 4." name="description">
+    <meta content="Spruko" name="author">
+
+    <!-- Title -->
+    <title>@ViewData["Title"] | Universidade Técnica de Angola</title>
+    <link href="~/lib/toastr.js/toastr.min.css" rel="stylesheet" />
+    <!-- Favicon -->
+    <link href="~/assets/img/photos/Utang.jfif" rel="icon" type="image/jfif">
+
+    <!-- Fonts -->
+    @*<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800" rel="stylesheet">*@
+
+    <!-- Icons -->
+    <link href="~/assets/css/icons.css" rel="stylesheet">
+
+
+    <!--Bootstrap.min css-->
+    <link rel="stylesheet" href="~/assets/plugins/bootstrap/css/bootstrap.min.css">
+
+    <!-- Ansta CSS -->
+    <link href="~/assets/css/dashboard.css" rel="stylesheet" type="text/css">
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <link href="~/assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <!-- Custom scroll bar css-->
+    <link href="~/assets/plugins/customscroll/jquery.mCustomScrollbar.css" rel="stylesheet" />
+
+    <!-- Data table css -->
+    <link href="~/assets/plugins/datatable/dataTables.bootstrap4.min.css" rel="stylesheet" />
+@*<link href="~/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />*@
+    <!--Fullcalendar css-->
+
+
+    <link href='~/assets/plugins/fullcalendar/fullcalendar.css' rel='stylesheet' />
+    <link href='~/assets/plugins/fullcalendar/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+
+    @*<script src="~/js/site.js"></script>*@
+
+    <!-- sweetalert css-->
+    <link href="~/assets/plugins/sweet-alert/sweetalert.css" rel="stylesheet" />
+
+    <!-- Sidemenu Css -->
+    <link href="~/assets/plugins/toggle-sidebar/css/sidemenu.css" rel="stylesheet">
+
+    <link href="~/css/site.css" rel="stylesheet" />
+</head>
+<body class="app sidebar-mini rtl">
+    <div class="page">
+        <div id="global-loader"></div>
+        <div class="page-main">
+            <!-- Menu-Lateral-->
+
+            <partial name="_SideMenu" />
+            <!-- Menu-Lateral-->
+            <!-- app-content-->
+            <div class="app-content ">
+                <div class="side-app">
+                    <div class="main-content">
+
+                        <div class="p-2 d-block d-sm-none navbar-sm-search">
+                            <!-- Form -->
+                            <form class="navbar-search navbar-search-dark form-inline ml-lg-auto">
+                                <div class="form-group mb-0">
+                                    <div class="input-group input-group-alternative">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                        </div><input class="form-control" placeholder="Search" type="text">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Top navbar -->
+                        <nav class="navbar navbar-top  navbar-expand-md navbar-dark" id="navbar-main">
+                            <div class="container-fluid">
+                                <a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-toggle="sidebar" href="#"></a>
+                                <h1 id="h1-titulo"> UNIVERSIDADE TÉCNICA DE ANGOLA</h1>
+                                <!-- User -->
+                                <ul class="navbar-nav align-items-center ">
+                                    <li class="nav-item d-none d-md-flex">
+                                        <div class="dropdown d-none d-md-flex mt-2 ">
+                                            <a class="nav-link full-screen-link pl-0 pr-0"><i class="fe fe-maximize-2 floating " id="fullscreen-button"></i></a>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item dropdown d-none d-md-flex">
+                                        <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-0" data-toggle="dropdown" href="#" role="button">
+                                            <div class="media align-items-center">
+                                                <i class="fe fe-user "></i>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-arrow dropdown-menu-right">
+                                            <a class="dropdown-item d-flex" href="#">
+                                                <span class="avatar brround mr-3 align-self-center"> <img src="~/assets/img/faces/male/4.jpg" alt="imag"></span>
+                                                <div>
+                                                    <strong>Madeleine Scott</strong> sent you friend request
+                                                    <div class=" mt-2 small text-muted">
+                                                        <span class="btn btn-sm btn-primary">Conform</span>
+                                                        <span class="btn btn-sm btn-outline-primary">Delete</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a class="dropdown-item d-flex" href="#">
+                                                <span class="avatar brround mr-3 align-self-center"><img src="~/assets/img/faces/female/14.jpg" alt="imag"></span>
+                                                <div>
+                                                    <strong>rebica</strong> sent you friend request
+                                                    <div class=" mt-2 small text-muted">
+                                                        <span class="btn btn-sm btn-primary">Conform</span>
+                                                        <span class="btn btn-sm btn-outline-primary">Delete</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a class="dropdown-item d-flex" href="#">
+                                                <span class="avatar brround mr-3 align-self-center"><img src="~/assets/img/faces/male/1.jpg" alt="imag"></span>
+                                                <div>
+                                                    <strong>Devid robott</strong> sent you friend request
+                                                    <div class=" mt-2 small text-muted">
+                                                        <span class="btn btn-sm btn-primary">Conform</span>
+                                                        <span class="btn btn-sm btn-outline-primary">Delete</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="dropdown-divider"></div><a class="dropdown-item text-center text-muted-dark" href="#">View all Requestes</a>
+                                        </div>
+                                    </li>
+
+                                    <li class="nav-item dropdown d-none d-md-flex">
+                                        <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-0" data-toggle="dropdown" href="#" role="button">
+                                            <div class="media align-items-center">
+                                                <i class="fe fe-mail "></i>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu  dropdown-menu-lg dropdown-menu-arrow dropdown-menu-right">
+                                            <a href="#" class="dropdown-item text-center">12 New Messages</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" class="dropdown-item d-flex">
+                                                <span class="avatar brround mr-3 align-self-center"><img src="~/assets/img/faces/male/41.jpg" alt="img"></span>
+                                                <div>
+                                                    <strong>Madeleine</strong> Hey! there I' am available....
+                                                    <div class="small text-muted">3 hours ago</div>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="dropdown-item d-flex">
+                                                <span class="avatar brround mr-3 align-self-center"><img src="~/assets/img/faces/female/1.jpg" alt="img"></span>
+                                                <div>
+                                                    <strong>Anthony</strong> New product Launching...
+                                                    <div class="small text-muted">5  hour ago</div>
+                                                </div>
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" class="dropdown-item text-center">See all Messages</a>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item dropdown d-none d-md-flex">
+                                        <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-0" data-toggle="dropdown" href="#" role="button">
+                                            <div class="media align-items-center">
+                                                <i class="fe fe-bell f-30 "></i>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-arrow dropdown-menu-right">
+                                            <a href="#" class="dropdown-item d-flex">
+                                                <div>
+                                                    <strong>Someone likes our posts.</strong>
+                                                    <div class="small text-muted">3 hours ago</div>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="dropdown-item d-flex">
+                                                <div>
+                                                    <strong> 3 New Comments</strong>
+                                                    <div class="small text-muted">5  hour ago</div>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="dropdown-item d-flex">
+                                                <div>
+                                                    <strong> Server Rebooted.</strong>
+                                                    <div class="small text-muted">45 mintues ago</div>
+                                                </div>
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" class="dropdown-item text-center">View all Notification</a>
+                                        </div>
+                                    </li>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                         
+                                        <li class="nav-item dropdown">
+                                            <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-md-0" data-toggle="dropdown" href="#" role="button">
+                                                <div class="media align-items-center">
+                                                    <span class="avatar avatar-sm rounded-circle"><img alt="Image placeholder" src='@Url.Action("UserImagem", "Utanga")'></span>
+                                                    <div class="media-body ml-2 d-none d-lg-block">
+                                                        <span class="mb-0 ">@User.Identity.Name</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
+                                                <div class=" dropdown-header noti-title">
+                                                    <h6 class="text-overflow m-0">Seja Bem-vindo!</h6>
+                                                </div>
+                                                <a class="dropdown-item" href="user-profile.html"><i class="ni ni-single-02"></i> <span>Meu Perfil</span></a>
+                                                <a class="dropdown-item" href="#"><i class="ni ni-settings-gear-65"></i> <span>Configurações</span></a>
+                                                <a class="dropdown-item" href="#"><i class="ni ni-calendar-grid-58"></i> <span>Actividade</span></a>
+                                                <a class="dropdown-item" href="#"><i class="ni ni-support-16"></i> <span>Suporte Técnico</span></a>
+                                                <div class="dropdown-divider">
+                                                </div>
+                                                    <form asp-area="" asp-controller="Utanga" asp-action="Logout" method="post">
+                                                        <ul class="nav navbar-nav navbar-right">
+                                                            <li>
+                                                                <button type="submit" class="btn btn-link navbar-btn navbar-link"><i class="ni ni-user-run"></i> <span>Sair</span></button>
+                                                            </li>
+                                                        </ul>
+                                                </form>
+                                            </div>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="nav-item">
+                                            <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-md-0" data-toggle="dropdown" href="#" role="button">
+                                                <div class="media align-items-center">
+                                                    <span class="avatar avatar-sm rounded-circle"><img alt="Image placeholder" src="~/assets/Imagens/user.jpg"></span>
+                                                    <div class="media-body ml-2 d-none d-lg-block">
+                                                        <span class="mb-0 ">Log In</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </nav>
+                        <!-- Top navbar-->
+                        <!-- Page content -->
+                        <div class="container-fluid pt-8">
+
+                            @RenderBody()
+                            <!-- Footer -->
+                            <footer class="footer">
+                                <div class="row align-items-center justify-content-xl-between">
+                                    <div class="col-xl-6">
+                                        <div class="copyright text-center text-xl-left text-muted">
+                                            <p class="text-sm font-weight-500">Direitos reservados @DateTime.Now.Year © Universidade Técnica de Angola</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </footer>
+                            <!-- Footer -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- app-content -->
+        </div>
+    </div>
+    <!-- Back to top -->
+    <a href="#top" id="back-to-top"><i class="fa fa-angle-up"></i></a>
+
+    <!-- Ansta Scripts -->
+    <!-- Core -->
+
+    <script src="~/assets/js/popper.js"></script>
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Optional JS -->
+    <script src="~/assets/plugins/chart.js/dist/Chart.min.js"></script>
+    <script src="~/assets/plugins/chart.js/dist/Chart.extension.js"></script>
+
+    <!-- Data tables -->
+
+    <script src="~/assets/plugins/datatable/jquery.dataTables.min.js"></script>
+    <script src="~/assets/plugins/datatable/dataTables.bootstrap4.min.js"></script>
+
+    <!--Fullcalendar js-->
+    <script src='~/assets/plugins/fullcalendar/moment.min.js'></script>
+    <script src='~/assets/plugins/fullcalendar/jquery-ui.min.js'></script>
+    <script src='~/assets/plugins/fullcalendar/fullcalendar.min.js'></script>
+
+    <!-- Date Picker-->
+    <script src="~/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
+    <!-- Form wizard js -->
+    <script src="~/assets/plugins/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
+    <script src="~/assets/js/wizard.js"></script>
+
+    <!-- Sweet alert Plugin -->
+    <script src="~/lib/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Fullside-menu Js-->
+    <script src="~/assets/plugins/toggle-sidebar/js/sidemenu.js"></script>
+
+    <!-- Custom scroll bar Js-->
+    <script src="~/assets/plugins/customscroll/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
+    <!-- Ansta JS -->
+
+    <script src="~/assets/js/custom.js"></script>
+
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>*@
+    
+</body >
+</html >

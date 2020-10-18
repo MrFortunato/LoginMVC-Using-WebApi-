@@ -1,0 +1,207 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+<!-- jvectormap CSS -->
+<link href="~/assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+<!-- Custom scroll bar css-->
+<link href="~/assets/plugins/customscroll/jquery.mCustomScrollbar.css" rel="stylesheet" />
+
+
+@*<div class="container">*@
+<div class="row">
+    <div class="col-xl-4 col-lg-4">
+        <div class="card pull-up shadow bg-gradient-blue">
+            <div class="card-content">
+                <div class="card-body">
+                    <img src="~/assets/img/circle.svg" class="card-img-absolute" alt="circle-image">
+                    <div class="media d-flex">
+                        <div class="media-body text-left">
+                            <h4 class="text-white">Sales</h4>
+                            <h2 class="text-white mb-0">88,568</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fe fe-shopping-cart text-white font-large-2 float-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-4">
+        <div class="card pull-up shadow bg-gradient-warning">
+            <div class="card-content">
+                <div class="card-body">
+                    <img src="~/assets/img/circle.svg" class="card-img-absolute" alt="circle-image">
+                    <div class="media d-flex">
+                        <div class="media-body text-left">
+                            <h4 class="text-white">Profit</h4>
+                            <h2 class="text-white mb-0">$25,28,568</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fe fe-bar-chart text-white font-large-2 float-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-4">
+        <div class="card pull-up shadow bg-gradient-danger">
+            <div class="card-content">
+                <div class="card-body">
+                    <img src="~/assets/img/circle.svg" class="card-img-absolute" alt="circle-image">
+                    <div class="media d-flex">
+                        <div class="media-body text-left">
+                            <h4 class="text-white">Inbox</h4>
+                            <h2 class="text-white mb-0">236</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fe fe-mail success font-large-2 text-white float-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="card shadow overflow-hidden">
+            <div class="card-body">
+                <div class="widget text-center" id="TotalCandito">
+                    
+                </div>
+            </div>
+            <span class="updating-chart" data-peity='{ "fill": ["#ffa21d"]}'>5,3,9,6,5,9,2,5,3,6,7,8,6</span>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="">
+            <div class="">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-sm-12">
+                        <div class="card shadow overflow-hidden">
+                            <div class="card-body pb-0">
+                                <div class="widget text-center" id="TotalCurso">
+                                   
+                                </div>
+                            </div>
+                            <span class="bar" data-peity='{ "fill": ["#00c3ed"]}'>5,4,5,2,8,4,5,6,5,2,4,4,8,4,6,2,3,4</span>
+                        </div>
+                        <div class="card shadow overflow-hidden">
+                            <div class="card-body pb-0">
+                                <div class="widget text-center" id="TotalDisciplina">
+                                   
+                                </div>
+                            </div>
+                            <span class="bar" data-peity='{ "fill": ["#18b16f"]}'>5,4,5,2,8,4,5,6,5,2,4,4,8,4,6,2,3,4</span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="">
+            <div class="">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-sm-6">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="widget text-center">
+                                    <small class="">Inscrições Válidas</small>
+                                    <h2 class="text-xxl mb-1 text-success"> 142</h2>
+                                    <p class="mb-0"><span class=""><i class="fas fa-caret-up ml-1 text-success"></i> 4%</span>  last month</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="widget text-center" id="">
+                                    <small class="">Inscrições Canceledas</small>
+                                    <h2 class="text-xxl mb-1 text-yellow"> 256</h2>
+                                    <p class="mb-0"><span class=""><i class="fas fa-caret-down text-danger ml-1"></i> 5%</span> last month</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-sm-6">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="widget text-center" id="totalAgendado">
+                                    
+                                    <p class="mb-0"><span class=""><i class="fas fa-caret-up text-success ml-1"></i> 6%</span> last month</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="widget text-center" id="totalCancelado">
+                                   
+                                  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*</div>*@
+<script>
+    $(document).ready(function () {
+        Carregar_Painel();
+    })
+    function Carregar_Painel() {
+        $.ajax({
+            url: "/Home/Painel",
+            type: "Get",
+              dataType: "JSON",
+            success: function (data)
+            {
+                debugger
+                var cand = '';
+                var curso = '';
+                var disciplina = '';
+                var Exame_Agendado = '';
+                var Exame_Cancelado = '';
+                $("#TotalCandito").empty();
+                $("#TotalCurso").empty();
+                $("#TotalDisciplina").empty();
+                $("#totalCancelado").empty();
+                $("#totalAgendado").empty();
+                if (data != null) {
+                    cand = '<div>'
+                        + '<i class="fas fa-users fa-5x text-yellow"></i></div>'
+                        + '<h4 class="text-muted mt-2 mb-0">Candidatos</h4>'
+                        + '<h2 class="display-2 mb-0" >' + data.totalCandidatos + '</h2>'
+                        + '<a href="#" class="btn btn-outline-yellow mt-3 btn-sm btn-pill">Ver Todos</a>';
+                    curso ='<small class="text-muted">Cursos</small>'
+                        + '<h2 class="text-xxl mb-0">' + data.totalCursos + '</h2>';
+                    disciplina ='<small class="text-muted">Disciplinas</small>'
+                        + '<h2 class="text-xxl mb-0">' + data.totalDisciplinas + '</h2>';
+                    Exame_Agendado = '<small class="">Exames Agendados</small>'
+                        + '<h2 class="text-xxl text-primary mb-1">' + data.totalEx_Agendados + '</h2>'
+                        +'<p class="mb-0"><span class=""><i class="fas fa-caret-up text-success ml-1"></i> 6%</span> Último mês</p>';
+                    Exame_Cancelado = ' <small class="">Exames Cancelados</small>'
+                        + '<h2 class="text-xxl text-danger mb-1">' + data.totalEx_Cancelados + '</h2>'
+                        +'<p class="mb-0"><span class=""><i class="fas fa-caret-down text-danger ml-1"></i> 8%</span> Último mês</p>';
+                }
+                $("#TotalCandito").append(cand);
+                $("#TotalCurso").append(curso);
+                $("#TotalDisciplina").append(disciplina);
+                $("#totalAgendado").append(Exame_Agendado);
+                $("#totalCancelado").append(Exame_Cancelado);
+            }
+        })
+    }
+
+</script>
+
+<!-- peitychart -->
+<script src="~/assets/plugins/peitychart/jquery.peity.min.js"></script>
+<script src="~/assets/plugins/peitychart/peitychart.init.js"></script>
+

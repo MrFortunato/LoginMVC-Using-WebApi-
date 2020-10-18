@@ -1,0 +1,345 @@
+﻿@model Exame_Online.Models.CandidaturaAddModel
+@{
+    @*@if(User.IsInRole("Administrador")){
+                    ViewData["Title"] = "Cadastramento Online";
+                    Layout = "~/Views/Shared/Layout.cshtml";
+                }
+                else
+                {
+            ViewData["Title"] = "Inscrição Online";
+            Layout = "~/Views/Shared/LayoutInicial.cshtml";
+        }*@
+    ViewData["Title"] = "Inscrição Online";
+    Layout = "~/Views/Shared/LayoutInicial.cshtml";
+
+
+}
+
+<div class="container bakx">
+    <div class="custom-control">
+        <!--Div alerta-->
+        <div class="alert alert-danger mb-0 text-white text-center" id="DivAlerta" style="padding:10px;display:none;" role="alert">
+            <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+            <span class="alert-inner--text" id="InfoTexto"><strong>Alerta!</strong> !</span>
+            <button type="button" class="close btnX" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <!--Fim Div alerta-->
+        <br>
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="mb-0"><b>Inscrição</b> Online</h2>
+            </div>
+            <div class="card-body">
+                <div class="nav-wrapper">
+                    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0 active border" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="fe fe-user mr-2"></i>Informações Pessoais</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0 border" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="fe fe-calendar mr-2"></i>informações do Curso</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card shadow mb-0">
+                    <div class="card-body ">
+                        <!--form-->
+                        <form asp-action="Online" asp-controller="Inscricao" method="post" autocomplete="off" enctype="multipart/form-data">
+                            <div class="tab-content" id="myTabContent">
+
+                                <div class="form-group">
+                                    <!--Inicio div alerta-->
+                                    <div class="alert alert-danger mb-0 text-white text-center" id="DivAlerta" style="padding:10px;display:none;" role="alert">
+                                        <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+                                        <span class="alert-inner--text" id="InfoTexto"><strong>Alerta!</strong> !</span>
+                                        <button type="button" class="close btnX" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <!--Fim div alerta-->
+                                </div>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                                    <div class="form-row">
+                                        <div class="col-md-6 ">
+                                            <div class="form-group">
+                                                <input asp-for="Nome" class="form-control" placeholder="Nome" />
+                                                <span asp-validation-for="Nome" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 ">
+                                            <div class="form-group">
+                                                <input asp-for="SobreNome" class="form-control" placeholder="Sobrenome" />
+                                                <span asp-validation-for="SobreNome" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <select asp-for="Genero" name="Genero" id="Genero" class="form-control">
+                                                    <option value="">-- Selecione gênero --</option>
+                                                    <option value="M">Masculino</option>
+                                                    <option value="F">Feminino</option>
+                                                    <option value="O">Outros</option>
+                                                </select>
+                                                <span asp-validation-for="Genero" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <select asp-for="EstadoCivil" name="EstadoCivil" class="form-control">
+                                                    <option value="">-- Selecione estado civíl --</option>
+                                                    <option value="1">Solteiro</option>
+                                                    <option value="2">Casado</option>
+                                                    <option value="3">Divorciado</option>
+                                                    <option value="4">Viúvo</option>
+                                                </select>
+                                                <span asp-validation-for="EstadoCivil" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 ">
+                                            <div class="form-group">
+                                                <div class="wd-200 mg-b-30">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">
+                                                                <i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+                                                            </div>
+                                                        </div><input asp-for="Dt_Nasc" class="form-control datepicker" placeholder="DD/MM/YYYY" type="text">
+                                                    </div>
+                                                </div>
+                                                <span asp-validation-for="Dt_Nasc" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <input asp-for="NrBI" class="form-control" placeholder="Nº do Identifição" />
+                                            <span asp-validation-for="NrBI" class="error_form"></span>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <input asp-for="Telefone" class="form-control" placeholder="Telefone" />
+                                                <span asp-validation-for="Telefone" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-5">
+                                            <div class="form-group">
+                                                <input asp-for="NomeUser" class="form-control" placeholder="Nome de Usuário" />
+                                                <span asp-validation-for="NomeUser" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-7">
+                                            <div class="form-group">
+                                                <input asp-for="Email" class="form-control" placeholder="Email" />
+                                                <span asp-validation-for="Email" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <input asp-for="Senha" class="form-control" placeholder="Senha" />
+                                                <span asp-validation-for="Senha" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <input asp-for="ConfirmarSenha" class="form-control" placeholder="Confirmar Senha" />
+                                                <span asp-validation-for="ConfirmarSenha" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input asp-for="Foto" type="file" class="form-control" /><br />
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <select class="form-control" id="Id_Departamento"
+                                                        asp-items="@ViewBag.Departamentos">
+                                                    <option value="">-- Selecione o ramo (1ª Opção) --</option>
+                                                </select>
+                                                <span asp-validation-for="Id_Curso" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <select asp-for="Id_Curso" class="form-control" id="Curso"
+                                                        asp-items="@ViewBag.Cursos">
+                                                    <option value=""> -- Selecione o Curso (1ª Opção) --</option>
+                                                </select>
+                                                <span asp-validation-for="Id_Curso" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <select class="form-control" id="Id_Departamento2"
+                                                        asp-items="@ViewBag.Departamentos">
+                                                    <option value="">-- Selecione o ramo (2ª Opção) --</option>
+                                                </select>
+                                                <span asp-validation-for="Id_Curso2" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <select asp-for="Id_Curso2" class="form-control" id="Curso2"
+                                                        asp-items="@ViewBag.Cursos">
+                                                    <option value="">-- Selecione o Curso (2ª Opção) --</option>
+                                                </select>
+                                                <span asp-validation-for="Id_Curso2" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <select asp-for="AnoLectvo" class="form-control" id="Curso2"
+                                                        asp-items="@ViewBag.Anos">
+                                                    <option value="">-- Selecione o Ano Lectivo --</option>
+                                                </select>
+                                                <span asp-validation-for="AnoLectvo" class="error_form"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <select asp-for="Periodo" name="Periodo" class="form-control">
+                                                    <option value="">--Selecione periodo --</option>
+                                                    <option value="1">Manhã</option>
+                                                    <option value="2">Tarde</option>
+                                                    <option value="3">Pôs Laboral</option>
+                                                </select>
+                                                <span asp-validation-for="AnoLectvo" class="error_form"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-success" id="submeter"><i class="fa fa-save"></i> Inscrever-se</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <!--/form-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Date Picker-->
+<script src="~/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //document.getElementById("DivAlert").style.display = "none"; // Esconder div alerta
+        var mensagem;
+        var error_message = document.getElementById("InfoTexto");
+        var msg = '@ViewData["result"]';
+
+        if (msg == '1') {
+            toastr.success("Inscrição feita com sucesso!!!", "Candidatura!!");
+            EsconderAlerta();
+            window.setTimeout(function () {
+                //Direcionar para lista dos Curso!! depois da Cadastrar
+                @*window.location.href = "@Url.Action("Lista", "Inscricao")";*@
+            }, 500);
+        }
+        else {
+            mensagem = '@ViewData["result"]';
+            EsconderAlerta();
+            error_message.innerHTML = mensagem;
+            ExibirAlerta();
+        }
+    })
+    //Função para exibir mensagem de Sucesso ou Erro no cadastramento
+
+    // Função para o datetimepicker da data de nascimento
+    $('.datepicker').datepicker({
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        format: 'dd/mm/yyyy',
+        language: "pt-BR",
+    });
+    // Função para carregar dropdownlist Opção 1
+    $(document).ready(function () {
+        $("#Id_Departamento").change(function () {
+            if ($(this).find(':selected').text() != "-- Selecione o ramo (1ª Opção) --") {
+                var Id = $(this).val();
+                $.ajax({
+                    type: "Post",
+                    url: "/Inscricao/GetCurso?Id=" + Id,
+                    contentType: "html",
+                    success: function (response) {
+                        if (response != null) {
+                            $("#Curso").empty();
+                            $("#Curso").append(response);
+                        }
+                        else {
+                            LimparDropdownCurso();
+                        }
+
+                    }
+                })
+            }
+            else {
+                LimparDropdownCurso();
+            }
+        })
+    })
+    // Função para carregar dropdownlist Opção 2
+    $(document).ready(function () {
+        $("#Id_Departamento2").change(function () {
+            debugger
+            if ($(this).find(':selected').text() != "-- Selecione o ramo (2ª Opção) --") {
+                var Id = $(this).val();
+                $.ajax({
+                    type: "Post",
+                    url: "/Inscricao/GetCurso?Id=" + Id,
+                    contentType: "html",
+                    success: function (response) {
+                        if (response != null) {
+                            $("#Curso2").empty();
+                            $("#Curso2").append(response);
+                        }
+                        else {
+                            LimparDropdownCurso2();
+                        }
+
+                    }
+                })
+            }
+            else {
+                LimparDropdownCurso2();
+            }
+        })
+    })
+    //Função para fazer reset na DropdownList Opção 1
+    function LimparDropdownCurso() {
+
+        $("#Curso").empty();
+        var dados = '<option value="">-- Selecione o Curso (1ª Opção) --</option>';
+        $("#Curso").append(dados);
+    }
+        //Função para fazer reset na DropdownList Opção 2
+    function LimparDropdownCurso2() {
+
+        $("#Curso2").empty();
+        var dados = '<option value="">-- Selecione o Curso (2ª Opção) --</option>';
+        $("#Curso2").append(dados);
+    }
+
+    function ExibirAlerta() {
+        $("#DivAlerta").css("display", "block")
+    }
+
+    $(".btnX").click(function () {
+        //$("#DivAlerta").css("display", "none");
+        $("#DivAlerta").fadeOut("slow");
+    })
+
+    function EsconderAlerta() {
+        $("#DivAlerta").css("display", "none")
+    }
+
+</script>

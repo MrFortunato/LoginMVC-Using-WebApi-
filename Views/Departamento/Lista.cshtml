@@ -1,0 +1,201 @@
+﻿@model IEnumerable<Exame_Online.ModelsView.DepartamentoModelView>
+@{
+    ViewData["Title"] = "Lista dos Departamentos";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<div class="page-header mt-0 shadow p-3">
+    <div class="btn-group mb-0">
+        @*<a href="#" onclick="AddEdit_Depart(0)" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>*@
+        <a asp-action="Cadastrar" asp-controller="Departamento" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="mb-0">Departamentos</h2>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-sm w-100 text-nowrap" id="TbDepartamento">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Departamento</th>
+                            <th>Total Cursos</th>
+                            <th>Operação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal para novo agendamento de Exames -->
+<div class="modal fade" id="ModalDepart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="titulo_ModalDepart"></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal_body">
+                <div class="container">
+                    <form  method="post" autocomplete="off">
+                        @*---------- Iniciao da Div de notificação-----------------*@
+                        <div class="alert alert-danger mb-0 text-white text-center" style="padding:10px;display:none" role="alert">
+                            <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+                            <span class="alert-inner--text"><strong>Alerta!</strong> !</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @*---------- Fim da Div de notificação-----------------*@
+                        <div class="form-group">
+                            <input hidden id="Id_Departamento" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Nome Departamento">Nome Departamento</label>
+                            <input id="Nome_Departamento" name="Nome_Departamento" class="form-control" />
+                            <span id="erro_NomeDepart" class="error_form"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <buttton href="#" onclick="AddDertpart()"  class="btn btn-success btn-block"><i class="fa fa-save"></i><span id="btnDepart"></span></buttton>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        ListarDepartamentos();
+    });
+
+    // Função para Listar Cursos
+    function ListarDepartamentos() {
+
+        $("#TbDepartamento").DataTable({
+            "destroy": true,
+            "retrieve": true,
+            "language": {
+                "lengthMenu": "Exibe _MENU_ Registros por página",
+                "search": "Procurar",
+                "paginate": { "previous": "Retornar", "next": "Avançar" },
+                "zeroRecords": "Nada foi encontrado",
+                "info": "Exibindo página _PAGE_ de _PAGES_",
+                "infoEmpty": "Sem registros",
+                "infoFiltered": "(filtrado de _MAX_ regitros totais)"
+            },
+            /*    "processing": true,*/    // mostrar a progress bar
+            "filter": true,            // habilita o filtro(search box)
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]], //define as opções de paginação
+            "pageLength": 10,      // define o tamanho da página
+            "ajax": {
+                "url": "https://localhost:44308/api/Departamento/GetAll",
+                "type": "Get",
+                "datatype": "json",
+                "dataSrc": "",
+
+            },
+            "columns": [
+                { "data": "id_Departamento", "autoWidth": true },
+                { "data": "nome_Departamento", "autoWidth": true },
+                { "data": "total_Curso", "autoWidth": true },
+
+                {
+                    "data": "id_Departamento", "render": function (data) { return '<a href='+
+                            '@Url.Action("Editar", "Departamento")?Id='+data +'  class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a> <a href="#" onclick=Deletar(' + data + ') class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>'; }
+                },
+
+            ]
+
+        });
+
+
+    }
+
+    //function AddEdit_Depart(id) {
+    //    if (id == 0) {
+    //        $("#titulo_ModalDepart").html("Add Departamento");
+    //        $("#btnDepart").html("Cadastrar");
+    //        $("#ModalDepart").modal();
+    //    }
+    //    else {
+    //        $.ajax({
+    //            url: "https://localhost:44324/api/Departamento/GetById/"+id,
+    //            type: "GET",
+    //            dataType: "Json",
+    //            success: function (data) {
+    //                debugger
+    //                if (data != null) {
+    //                    $("#titulo_ModalDepart").html("Editar Departamento");
+    //                    $("#btnDepart").html("Editar");
+    //                    $("#Id_Departamento").val(data.DepartamentoId);
+    //                    $("#Nome_Departamento").val(data.NomeDepartamento);
+    //                    $("#ModalDepart").modal();
+
+    //                }
+    //                else {
+
+    //                }
+    //            }
+    //        })
+    //        .fail(function () {
+    //            swal('Oops...', 'Something went wrong with ajax !', 'error');
+    //        });
+    //    }
+
+    //}
+
+
+    // Função para eliminar Curso
+    function Deletar(id) {
+        swal({
+            icon: "warning",
+            title: "Deseja eliminar o Departamento?",
+            text: "O Departamento será eliminado da base de dados",
+            type: 'warning',
+
+            buttons: {
+                cancel: true,
+                confirm: "Confirmar",
+            }
+        }).then((Apagar) => {
+            if (Apagar) {
+                $.ajax({
+                    url: "/Departamento/Deletar?Id=" + id,
+                    type: "Delete",
+                    data: {},
+                    dataType: 'json'
+                })
+                    .done(function (data) {
+                        debugger
+                        if (data == "1") {
+
+                            toastr.success("Deletado com sucesso!!!", "Departamento");
+                            $("#TbDepartamento").DataTable().ajax.reload();
+                        } else {
+                            toastr.error("Erro ao Eliminar!!!", "Erro!!");
+                        }
+
+                    })
+                    .fail(function () {
+                        swal('Oops...', 'Something went wrong with ajax !', 'error');
+                    });
+            }
+
+        })
+
+    }
+
+</script>

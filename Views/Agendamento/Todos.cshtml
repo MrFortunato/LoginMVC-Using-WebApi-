@@ -1,0 +1,484 @@
+﻿@{
+    ViewData["Title"] = "Todos Agendamentos";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+<script src="~/lib/moment.js/moment.min.js"></script>
+<script src="~/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="~/assets/js/bootstrap-datetimepicker.min.js"></script>
+<script src='~/assets/plugins/fullcalendar/fullcalendar.min.js'></script>
+<!-- Inicio Calendário -->
+<div class="page-header mt-0 shadow p-3">
+    <div class="btn-group mb-0">
+        <a href="#" onclick="CarregarDepartamento()" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">Agendamentos dos Exames</h2>
+            </div>
+            <div class="card-body">
+                <div id='calendar2'></div>
+            </div>
+        </div>
+    </div>
+</div> <!-- Fim -->
+
+<!-- Modal para novo agendamento de Exames -->
+<div class="modal fade" id="ModalAgendamento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">Novo Agendamento</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal_body">
+                <div class="container">
+                    <form id="Form_Agendamento" name="Form_Agendamento" autocomplete="off">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @*---------- Iniciao da Div de notificação-----------------*@
+                                    <div class="alert alert-danger mb-0 text-white text-center" id="DivAlerta" style="padding:10px;display:none;" role="alert">
+                                        <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+                                        <span class="alert-inner--text" id="InfoTexto"><strong>Alerta!</strong> !</span>
+                                        <button type="button" class="close btnX" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <select class="form-control" id="Id_Departamento" name="Id_Departamento">                                       
+                                        <option value="">-- Selecione o Departamento --</option>
+                                    </select>
+                                    <span id="erro_Departamento" class="error_form"></span>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 ">
+                                <div class="form-group">
+                                    <select Id="Id_Curso" name="Id_Curso" class="form-control">
+                                        <option value="">-- Selcionar o curso --</option>
+                                    </select>
+                                    <span id="erro_Curso" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <select name="Id_Disciplina" id="Id_Disciplina" class="form-control">
+                                        <option value="">-- Selecione a disciplina --</option>
+                                    </select>
+                                    <span id="erro_Disciplina" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="wd-200 mg-b-30">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+                                                </div>
+                                            </div><input  class="form-control datepicker" id="Dt_Realizacao" name="Dt_Realizacao" placeholder="Data Activação" type="text">
+                                        </div>
+                                    </div>
+                                    <span id="erro_Dt_Realizao" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 ">
+                                <div class="form-group">
+
+                                    <div class="wd-200 mg-b-30">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+                                                </div>
+                                            </div><input  name="Dt_expirar" id="Dt_expirar" class="form-control datepicker" placeholder="Data Expirar" type="text">
+                                        </div>
+                                    </div>
+                                    <span id="erro_Dt_Expirar" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="wd-200 mg-b-30">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fa fa-clock tx-16 lh-0 op-6"></i>
+                                                </div>
+                                            </div><input  class="form-control" id="relogio" name="relogio" placeholder="Horário" type="text">
+                                        </div>
+                                    </div>
+                                    <span id="erro_horario" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="form-group">
+                                    <select class="form-control" id="Sala_Exame_Id" name="Sala_Exame_Id">
+                                        <option value="-1">-- Sala --</option>
+                                        <option value="1">Sala 1</option>
+                                        <option value="2">Sala 2</option>
+                                    </select>
+                                    <span id="erro_sala" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="form-group">
+                                    <select id="Estado" name="Estado" class="form-control">
+                                        <option value="-1">-- Estado --</option>
+                                        <option value="1">Activo</option>
+                                        <option value="2">Inactivo</option>
+                                    </select>
+                                    <span id="erro_Estado" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <a href="#" onclick="AddAgend()" class="btn btn-success btn-block"><i class="fa fa-save"></i> Cadastrar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Agendamentos();
+
+    });
+    // Função que carrega o calendário
+    function Agendamentos() {
+        $('#calendar2').fullCalendar({
+            lang: 'pt',
+            //Alterando os meses e dias
+            monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+            dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay,listMonth'
+            },
+            // titulo dos botões
+            buttonText: {
+                today: 'Hoje',
+                month: 'Mês',
+                week: 'Semana',
+                day: 'Dia',
+                listMonth: 'Lista',
+
+            },
+            defaultDate: moment(),
+            navLinks: true, // can click day/week names to navigate views
+            businessHours: true, // display business hours
+            editable: true,
+            allDay: false,
+            eventLimit: false,
+            timeFormat: 'HH: mm', // uppercase H for 24-hour clock、
+            displayEventTime: true,
+            events: function (start, end, timezone, callback) {
+                $.ajax({
+                    type: "GET",
+                    //contentType: 'application/json; charset=utf-8',
+                    url: "https://localhost:44324/api/Agendamento/GetAll",
+                    dataType: "JSON",
+                    success: function (data) {
+                        var events = [];
+                        $.each(data, function (i, item) {
+                            events.push(
+                                {
+                                    title: item.Disciplina,
+                                    description: item.Curso,
+                                    start: moment(item.Data_Real).format("DD/MM/YYYY") + " " + item.Hora,
+                                    end: moment(item.Data_Real).format("DD/MM/YYYY"),
+                                    id: item.Id_Agendamento,
+                                    backgroundColor: "#9501fc",
+                                    borderColor: "#fc0101",
+                                    allDay: false,
+
+                                }
+                            );
+
+                        });
+                        callback(events);
+                    }
+
+                })
+            },
+
+        });
+
+    };
+    // funcão para chamar o Modal de agendamentos
+    function AddAgendamento(Id) {
+        if (Id == 0) {
+            Add();
+        }
+        else {
+
+        }
+    }
+   
+    // função de validação do dados do agendamento
+    function Validar() {
+        var v = true;
+
+        var depart = document.Form_Agendamento.Id_Departamento;
+        if (depart.value == "") {
+            $("#erro_Departamento").show();
+            $("#erro_Departamento").html("Selecione o ramo");
+            v = false;
+        }
+        else {
+            $("#erro_Departamento").hide();
+            //v = true;
+        }
+
+        var curso = document.Form_Agendamento.Id_Curso;
+        if (curso.value == "") {
+            $("#erro_Curso").show();
+            $("#erro_Curso").html("Selecione o curso");
+            v = false;
+        }
+        else {
+            $("#erro_Curso").hide();
+
+        }
+
+        var disciplina = document.Form_Agendamento.Id_Disciplina;
+        if (disciplina.value == "") {
+            $("#erro_Disciplina").show();
+            $("#erro_Disciplina").html("Selecione a disciplina");
+            v = false;
+        }
+        else {
+            $("#erro_Disciplina").hide();
+
+        }
+
+        var Dt_Realizacao = document.Form_Agendamento.Dt_Realizacao;
+        if (Dt_Realizacao.value == "") {
+            $("#erro_Dt_Realizao").show();
+            $("#erro_Dt_Realizao").html("Selecione a data da realização");
+            v = false;
+        }
+        else {
+            $("#erro_Dt_Realizao").hide();
+            //v = true;
+        }
+
+        var validade = document.Form_Agendamento.Dt_expirar;
+        if (validade.value == "") {
+            $("#erro_Dt_Expirar").show();
+            $("#erro_Dt_Expirar").html("Selecione a data válidade");
+            v = false;
+        }
+        else {
+            $("#erro_Dt_Expirar").hide();
+            //v = true;
+        }
+
+        var horas = document.Form_Agendamento.relogio;
+        if (horas.value == "") {
+            $("#erro_horario").show();
+            $("#erro_horario").html("Selecione a hora");
+            v = false;
+        }
+        else {
+            $("#erro_horario").hide();
+
+        }
+        var Sala = document.Form_Agendamento.Sala_Exame_Id;
+        if (Sala.value == "") {
+            $("#erro_sala").show();
+            $("#erro_sala").html("Selecione a Sala");
+            v = false;
+        }
+        else {
+            $("#erro_sala").hide();
+
+        }
+
+        var estado = document.Form_Agendamento.Estado;
+        if (estado.value == "-1") {
+            $("#erro_Estado").show();
+            $("#erro_Estado").html("Selecione o estado");
+            v = false;
+        }
+        else {
+            $("#erro_Estado").hide();
+
+        }
+        return v;
+    }
+
+    //function ComparaData(data1, data2) {
+    //    data1 = document.getElementById('Dt_Realizacao').value;
+    //}
+
+    var mensagem;
+    var error_message = document.getElementById("InfoTexto");
+
+    function AddAgend() {
+        var dataAv = document.getElementById('Dt_Realizacao').value;
+        var dataEx = document.getElementById('Dt_expirar').value;
+        var Curso = document.getElementById('Id_Curso').value;
+        var Disciplina = document.getElementById('Id_Disciplina').value;
+        var Horas = document.getElementById('relogio').value;
+        var Estado = document.getElementById('Estado').value;
+        var Sala = document.getElementById('Sala_Exame_Id').value;
+
+        var val = Validar();
+        if (val == false) {
+            return false;
+        }
+
+        var model = {
+            Id_Curso: Curso,
+            Id_Disciplina: Disciplina,
+            Horario: Horas,
+            Dt_Realizacao: dataAv,
+            Dt_expirar: dataEx,
+            Estado: Estado,
+            Id_SalaExame: Sala
+
+        }
+
+        $.ajax({
+            url: "/Agendamento/Cadastrar",
+            type: "Post",
+            dataType: "json",
+            data: model,
+            success: function (resultado) {
+                debugger
+                switch (resultado) {
+                    case "1":
+                        toastr.success("Agendamento Cadastrado com sucesso!!!", "Agendamento!!");
+                        $("#ModalAgendamento").modal("hide");
+                        $('#Form_Agendamento')[0].reset();  //  Zerar o Formulário
+                        $('#calendar2').fullCalendar('refetchEvents');
+                        EsconderAlerta();// Esconder a Div de Erro
+                        break
+                    case "2":
+                        mensagem = "Já há uma turma Cadastrada!!";
+                        EsconderAlerta();
+                        error_message.innerHTML = mensagem;
+                        ExibirAlerta();
+                        break
+                    case "3":
+                        break
+                    default:
+                        break
+
+                }
+
+            }
+        })
+    };
+
+    $('.datepicker').datepicker({
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        format: 'dd/mm/yyyy',
+        language: "pt-br",
+    });
+    $('#relogio').datetimepicker({
+        stepping: 15,//#cada 15 min
+        enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16,],
+        format: 'H:mm',
+
+
+    });
+
+    function CarregarDepartamento() {
+        $.ajax({
+            url: "https://localhost:44324/api/Departamento/GetAll", 
+            type: "Get",
+            dataType: "Json",
+            //contentType: "html",
+            success: function (data) {
+                var m = '<option value="">--Selecione o Departamento--</option>'
+                for (var i = 0; i < data.length; i++) {
+                    m += '<option value="' + data[i].DepartamentoId + '"> ' + data[i].NomeDepartamento + '</option>';
+                }
+                $("#Id_Departamento").html(m);
+                $("#ModalAgendamento").modal('show');
+            }
+        })
+    }
+    //
+    $("#Id_Departamento").change(function () {
+        var id = $(this).val();
+        $.ajax({
+            type: "Get",
+            url: "/Agendamento/ListarCursoDepart?Id=" + id,
+            contentType: "html",
+            success: function (data) {
+                var m = '<option value="">--Selecione o Curso--</option>'
+                for (var i = 0; i < data.length; i++) {
+                    m += '<option value="' + data[i].id_Curso + '"> ' + data[i].nome_Curso + '</option>';
+                }
+                $("#Id_Curso").html(m);
+
+            },
+            error: function () {
+                alert(err);
+            }
+        })
+    });
+    $("#Id_Curso").change(function () {
+        var id = $(this).val();
+        $.ajax({
+            type: "Get",
+            url: "/Agendamento/ListarDisciplinaCurso?Id=" + id,
+            contentType: "html",
+            success: function (data) {
+
+                var m = '<option value="">--Selecione o Disciplina--</option>'
+                for (var i = 0; i < data.length; i++) {
+                    m += '<option value="' + data[i].id_Disciplina + '"> ' + data[i].nome_Disciplina + '</option>';
+                }
+                $("#Id_Disciplina").html(m);
+
+            },
+            error: function () {
+                alert(err);
+            }
+        })
+
+    });
+    function LimparDropdownCurso() {
+
+        $("#Id_Curso").empty();
+        var dados = '<option value="">-- Selecione o Curso --</option>';
+        $("#Id_Curso").append(dados);
+    }
+
+
+    function ExibirAlerta() {
+        $("#DivAlerta").css("display", "block")
+    }
+
+    $(".btnX").click(function () {
+        //$("#DivAlerta").css("display", "none");
+        $("#DivAlerta").fadeOut("slow");
+    })
+
+    function EsconderAlerta() {
+        $("#DivAlerta").css("display", "none")
+    }
+
+</script>

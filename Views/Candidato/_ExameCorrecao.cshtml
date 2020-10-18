@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Exame_Online.ModelsView.RespostaModel>
+
+
+    <div class="container">
+        @if (Model != null)
+        {
+
+            @foreach (var p in Model)
+            {
+
+                <h4 class="panel-title">
+                    <a href="#" onclick="">
+                        <strong>@p.Pergunta_Nr |</strong> @p.Pergunta  |<strong> Cotaçao: @p.Valor </strong> |<strong> Tipo de Pertunta: @p.TipoPergunta </strong>
+                    </a>
+
+                </h4>
+                @foreach (var r in p.Opcoes)
+                {
+                    if (r.TipoPergunta != null)
+                    {
+                        switch (r.TipoPergunta)
+                        {
+                            case "Única":
+                                if (r.cotacao > 0)
+                                {
+                                    <p>@r.Respostax Acertou</p>
+                                }
+                                else
+                                {
+                                    <p>@r.Respostax Errou</p>
+                                }
+                                
+                                break;
+                            case "Multiplas":
+                                if (r.cotacao > 0)
+                                {
+                                    <p>@r.Respostax Acertou</p>
+                                }
+                                else
+                                {
+                                     <p>@r.Respostax Errou</p>
+                                }
+
+                                break;
+                            default:
+                                if (r.Respostax == r.RespostaTexte)
+                                {
+                                    <p>@r.RespostaTexte  Acertou</p>
+
+                                }
+                                else
+                                {
+                                    <p>@r.RespostaTexte  Errado</p>
+                                
+                                }
+                                break;
+                        }
+
+                    }
+                }
+
+
+            }
+        }
+    </div>

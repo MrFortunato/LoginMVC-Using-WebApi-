@@ -1,0 +1,142 @@
+﻿@model Exame_Online.Models.DisciplinaAddModel
+<div class="container">
+    <form id="Form_DisciplinaCurso" name="Form_DisciplinaCurso" method="post" >
+        <div class="form-row">
+            <div class="col-md-12 ">
+                @*---------- Iniciao da Div de notificação-----------------*@
+                <div class="alert alert-danger mb-0 text-white text-center" id="DivAlerta" style="padding:10px;display:none;" role="alert">
+                    <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+                    <span class="alert-inner--text" id="InfoTexto"><strong>Alerta!</strong> !</span>
+                    <button type="button" id="btnX" class="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @*---------- Fim da Div de notificação-----------------*@
+            </div>
+            <div class="col-md-12 ">
+                <div class="form-group">
+                    <input hidden asp-for="Id_Disciplina" class="form-control" id="Disciplina" />
+                </div>
+
+            </div>
+            <div class="col-md-7 ">
+                <div class="form-group">
+                    <input asp-for="Nome_Disciplina" class="form-control" disabled />
+                </div>
+                <span asp-validation-for="Nome_Disciplina" class="error_form"></span>
+            </div>
+
+            <div class="col-md-5 ">
+                <div class="form-group">
+                    <select Id="Estado" name="Estado" class="form-control">
+                        <option value="">-- Selecione o curso --</option>
+                        <option value="1">-- Activo --</option>
+                        <option value="2">-- Inactivo --</option>
+                    </select>
+                    <span id="erro_Estado" class="error_form"></span>
+                </div>
+            </div>
+
+            <div class="col-md-12 ">
+                <div class="form-group">
+                    <select class="form-control" id="Departamento"
+                            asp-items="@ViewBag.Departamentos">
+                        <option value="">-- Selecione o Departamento --</option>
+                    </select>
+                    <span id="erro_Id_Departamento" class="error_form"></span>
+                </div>
+            </div>
+
+            <div class="col-md-12 ">
+                <div class="form-group">
+                    <select asp-for="Id_Curso" Id="Curso" name="Id_Curso" class="form-control">
+                        <option value="">-- Selcionar o curso --</option>
+                    </select>
+                    <span id="erro_Id_Curso" class="error_form"></span>
+
+                </div>
+            </div>
+            <div class="col-md-6 ">
+                <div class="form-group">
+                    <input id="Perguntas" class="form-control" placeholder="Nº de Perguntas" />
+                    <span id="erro_pergunta" class="error_form"></span>
+                </div>
+              
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input id="duracao" class="form-control" placeholder="Duração do Texte (min)" />
+                    <span id="erro_duracao" class="error_form"></span>
+                </div>
+          
+            </div>
+            <div class="col-md-12 ">
+                <div class="form-group">
+                    <a href="#"  onclick="Add()" class="btn btn-success btn-block"><i class="fa fa-save"></i> Cadastrar</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    // Listar os Departamento
+    $("#Departamento").change(function () {
+        var id = $(this).val();
+        $.ajax({
+            type: "Get",
+            url: "/Agendamento/ListarCursoDepart?Id=" + id,
+            contentType: "html",
+            success: function (data) {
+                var m = '<option value="">--Selecione o Curso--</option>'
+                for (var i = 0; i < data.length; i++) {
+                    m += '<option value="' + data[i].id_Curso + '"> ' + data[i].nome_Curso + '</option>';
+                }
+                $("#Curso").html(m);
+
+            },
+            error: function () {
+                alert(err);
+            }
+        })
+    });
+    // Listar os Curso atraves do Departamento
+    $("#Curso").change(function () {
+        var id = $(this).val();
+        $.ajax({
+            type: "Get",
+            url: "/Agendamento/ListarDisciplinaCurso?Id=" + id,
+            contentType: "html",
+            success: function (data) {
+
+                var m = '<option value="">--Selecione o Disciplina--</option>'
+                for (var i = 0; i < data.length; i++) {
+                    m += '<option value="' + data[i].id_Disciplina + '"> ' + data[i].nome_Disciplina + '</option>';
+                }
+                $("#Disciplina").html(m);
+
+            },
+            error: function () {
+                alert(err);
+            }
+        })
+
+    });
+    function ExibirAlerta() {
+        $("#DivAlerta").css("display", "block")
+    }
+
+    $("#btnX").click(function () {
+        $("#DivAlerta").fadeOut("slow");
+
+    })
+
+    function EsconderAlerta() {
+        $("#DivAlerta").css("display", "none")
+    }
+
+   
+
+</script>

@@ -1,0 +1,396 @@
+﻿@model Exame_Online.Models.PerguntaAddModel
+@{
+    ViewData["Title"] = "Cadastrar Perguntas";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+<div class="page-header mt-0 shadow p-3">
+    <ol class="breadcrumb mb-sm-0">
+        <li class="breadcrumb-item"><a asp-action="Lista" asp-controller="Questionario">Listar</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Registrar</li>
+    </ol>
+</div>
+
+<!-- PROGRESSBAR WIZARD -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card m-b-20">
+            <div class="card-header">
+                <h2 class="mb-0"><b>Add</b> Pergunta</h2>
+            </div>
+            <div class="card-body">
+                @*---------- Iniciao da Div de notificação-----------------*@
+                <div class="alert alert-danger mb-0 text-white text-center" id="DivAlerta" style="padding:10px;display:none;" role="alert">
+                    <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+                    <span class="alert-inner--text" id="InfoTexto"><strong>Alerta!</strong> !</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @*---------- Fim da Div de notificação-----------------*@
+
+                <form autocomplete="off" enctype="multipart/form-data" id="formR" name="formR" style="margin-top:20px;">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div id="progressbarwizard" class="border pt-0">
+                        <ul class="nav nav-tabs nav-justified">
+                            <li class="nav-item"><a href="#account-2" data-toggle="tab" class="nav-link font-bold">Pergunta</a></li>
+                            <li class="nav-item"><a href="#profile-tab-2" data-toggle="tab" class="nav-link font-bold">Resposta</a></li>
+
+                        </ul>
+                        <div class="tab-content  card-body">
+                            <div id="bar" class=" mb-5 br-0 progress progress-striped progress-bar-success-alt">
+                                <div class="bar progress-bar progress-bar-success"></div>
+                            </div>
+                            <div class="tab-pane p-t-10 fade" id="account-2">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <textarea class="form-control" asp-for="Questao" name="Questao" id="pergunta" rows="3" placeholder="Digite aqui a pergunta ..."></textarea>
+                                            <span class="error_form" id="erro_Pergunta"> </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <select asp-for="Id_Disciplina" class="form-control" id="Id_Disciplina" name="Id_Disciplina"
+                                                    asp-items="@ViewBag.Disciplinas">
+                                                <option value=""> -- Selecione Disciplina --</option>
+                                            </select>
+                                            <span class="error_form" id="erro_Disciplina"> </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" asp-for="ValorP" name="ValorP" id="ValorPergunta" placeholder="Cotacão..">
+                                            <span class="error_form" id="erro_Cotacao"> </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="form-group">
+                                            <input type="file" class="form-control" name="Imagem" asp-for="Imagem" id="Imagem">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <select asp-for="Id_TipoPergunta" class="form-control" id="Tipo_Pergunta" name="Tipo_Pergunta"
+                                                        asp-items="@ViewBag.TipoPergunta">
+                                                    <option value="-1"> -- Selecione Tipo de Pergunta --</option>
+                                                </select>
+                                                <span class="error_form" id="erro_TipoPergunta"> </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane p-t-10 fade" id="profile-tab-2">
+                                <div class="form-row">
+                                    <div class="col-xs-7 col-sm-7 col-md-7">
+                                        <div class="form-group">
+                                            <input autocomplete="off" name="Resposta" asp-for="respostaAddModel[0].Resposta" type="text" id="resposta" placeholder="Resposta" class="form-control" />
+                                            <span class="error_form" id="erro_resposta"> </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4 col-sm-4 col-md-4">
+                                        <div class="form-group">
+                                            <input name="ValorR" type="text" placeholder="Cotação da reposta" asp-for="respostaAddModel[0].ValorR" id="valorR" class="form-control" />
+                                            <span class="error_form" id="erro_ValorR"> </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1 col-sm-1 col-md-1">
+                                        <button id="AddLista" class="btn btn-primary list_add_button" type="button">+</button>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <table id="detailsTable" class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:auto">#</th>
+                                                    <th style="width:auto">Resposta</th>
+                                                    <th style="width:auto">Cotação</th>
+                                                    <th style="width:auto">Remover</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <hr />
+
+                                <div class="form-group row clearfix">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <a href="#" onclick="Finalizar()" class="btn btn-success" id="submeter"><i class="fa fa-save"></i> Finzalizar</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    #detailsTable {
+        counter-reset: row-num-1;
+    }
+
+    table tr {
+        counter-increment: row-num;
+    }
+
+        table tr td:first-child::before {
+            content: counter(row-num) ". ";
+        }
+</style>
+<script>
+
+    var limite_maximo = ""; //Input Incrementar o limite
+    $(document).ready(function () {
+
+
+        var tipoPergunta = document.formR.Tipo_Pergunta;
+        //Adicionar multiplas respostas.
+        $("#AddLista").click(function () {
+
+            if (tipoPergunta.value == "5") {
+
+                Add(1);
+            }
+            else {
+
+                Add(5)
+            }
+
+        });
+
+    });
+
+    function Add(limite) {
+        limite_maximo = limite;
+        var x = $('#detailsTable tbody').find('tr').length; //Iniciar o Cotador
+
+        //Verificar o número de  input fields no Formulário
+        if (x < limite_maximo) {
+            x++; //incrementar o Contador Input
+            if ($.trim($("#resposta").val()) == "" || $.trim($("#valorR").val()) == "") return;
+
+            var Reposta = $("#resposta").val(),
+                Cotacao = $("#valorR").val(),
+                detailsTableBody = $("#detailsTable tbody");
+
+            var RespostaItem = '<tr><td></td><td>' + Reposta + '</td><td>' + Cotacao + '</td><td><a href="#" data-itemId="0" class="list_remove_button btn btn-danger btn-sm"><i class="fa fa-trash"></></a></td></tr>';
+            detailsTableBody.append(RespostaItem);
+            clearItem();
+
+        }
+        else {
+            toastr.warning("Excedeu o número máximo de Resposta!!!", "Resposta!!");
+        }
+    }
+
+
+    //Depois de inserir a resposta. limpar os inputs.
+    function clearItem() {
+        $("#resposta").val('');
+        $("#valorR").val('');
+    }
+
+    // Depois de adicionar uma resposta, remover resposta da Tabela .
+    $(document).on('click', 'a.list_remove_button', function (e) {
+        e.preventDefault();
+        var $self = $(this);
+        if ($(this).attr('data-itemId') == "0") {
+            $(this).parents('tr').css("background-color", "#ff6347").fadeOut(800, function () {
+                $(this).remove();
+            });
+        }
+    });
+
+    //Chamada quando for inserido um valor no input
+    $("#valorR").keypress(function (e) {
+        //Se não for letra digita não exibir o erro
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            //Exibir o erro
+            $("#erro_ValorR").html("Penas números").show().fadeOut("slow");
+            return false;
+        }
+    });
+    //Chamada quando for inserido um valor no input
+    $("#ValorPergunta").keypress(function (e) {
+        //Se não for letra digita não exibir o erro
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            //Exibir o erro
+            $("#erro_Cotacao").html("Penas números").show().fadeOut("slow");
+            return false;
+        }
+    });
+    // Validação do Formulário
+
+    //$("#ValorPergunta").keypress(function (evt) {
+    //    var self = $(this);
+    //    self.val(self.val().replace(/[^0-9\.]/g, ''));
+    //    if ((evt.which != 46 || self.val().indexOf('.') != -1) && (evt.which < 48 || evt.which > 57)) {
+    //          //Exibir o erro
+    //        $("#erro_Cotacao").html("Penas números decimal (.)").show().fadeOut("slow");
+    //        return false;
+    //    }
+    //});
+
+    //$("#valorR").keypress(function (evt) {
+    //    var self = $(this);
+    //    self.val(self.val().replace(/[^0-9\.]/g, ''));
+    //    if ((evt.which != 46 || self.val().indexOf('.') != -1) && (evt.which < 48 || evt.which > 57)) {
+    //        //Exibir o erro
+    //        $("#erro_Cotacao").html("Penas números decimal (.)").show().fadeOut("slow");
+    //        return false;
+    //    }
+    //});
+    function Validar() {
+        var v = true;
+
+        var pergunta = document.formR.Questao;
+        if (pergunta.value == "") {
+            $("#erro_Pergunta").show();
+            $("#erro_Pergunta").html("Digite a pergunta");
+            v = false;
+        }
+        else {
+            $("#erro_Pergunta").hide();
+
+        }
+        var disciplina = document.formR.Id_Disciplina;
+        if (disciplina.value == "") {
+            $("#erro_Disciplina").show();
+            $("#erro_Disciplina").html("Selecione a disciplina");
+            v = false;
+        }
+        else {
+            $("#erro_Disciplina").hide();
+  
+        }
+        var Cotacao = document.formR.ValorP;
+        if (Cotacao.value == "") {
+            $("#erro_Cotacao").show();
+            $("#erro_Cotacao").html("Digite a cotação");
+            v = false;
+        }
+        else {
+            $("#erro_Cotacao").hide();
+
+        }
+        var tipoPergunta = document.formR.Tipo_Pergunta;
+        if (tipoPergunta.value == "-1") {
+            $("#erro_TipoPergunta").show();
+            $("#erro_TipoPergunta").html("Selecione o tipo de pergunta");
+            v = false;
+        }
+        else {
+            $("#erro_TipoPergunta").hide();
+   
+        }
+
+        var total = 0;
+        // Somar as cotação da respostas
+        $("#detailsTable tbody tr").each(function () {
+            total += parseInt($(this).find('td:eq(2)').text());
+        });
+
+         //vericação das cotações /Pergunta-Resposta
+        var cotacaoPe = parseInt($("#ValorPergunta").val());
+        if (cotacaoPe != total) {
+            v = false;
+            toastr.warning("A Cotação da pergunta não coincide com o cotação da resposta!!", "Erro no cadastramento!!!");
+        }
+      
+        return v;
+
+    }
+    // Função para adicionar a pergunta e as resposta
+    function Finalizar() {
+        var mensagem;
+        var error_message = document.getElementById("InfoTexto");
+ 
+        var orderArr = [];
+        orderArr.length = 0;
+        $.each($("#detailsTable tbody tr"), function () {
+            orderArr.push({
+                //productName: $(this).find('td:eq(0)').html(),
+                Resposta: $(this).find('td:eq(1)').html(),
+                ValorR: $(this).find('td:eq(2)').text(),
+                //ValorR: parseFloat($(this).find('td:eq(2)')/*.text()).toFixed(2).replace(".", ",")*/,
+
+            });
+        });
+
+        var Pergunta = {
+            Questao: $("#pergunta").val(),
+        /*        ValorP: parseFloat($("#ValorPergunta").val()).toFixed(2).replace(".", ","),*/
+            ValorP: $("#ValorPergunta").val(),
+            Id_Disciplina: $("#Id_Disciplina").val(),
+            Id_TipoPergunta: $("#Tipo_Pergunta").val(),
+            Imagem: ""/*$("input[name='Imagem']").prop('files')[0],*/
+        };
+
+        
+
+        var resultado = Validar(); {
+            if (resultado == false) {
+                return false;
+            }
+        }
+
+        $.ajax({
+            url: "/Questionario/Adicionar",
+            type: "POST",
+            data: { pergunta: Pergunta, resposta: orderArr },
+            datatype: 'json',
+            ContentType: 'application/json;utf-8',
+            success: function (resposta) {
+
+                switch (resposta) {
+                    case "1":
+                        toastr.success("Cadastrado com sucesso!!!", "Pergunta/Respostas!!");
+                        $('#formR')[0].reset();  //  Zerar o Formulário
+                        //LimparError();
+                        EsconderAlerta();// Esconder a Div de Erro
+                        $('#TbPerguntas').DataTable().ajax.reload(); // reload a Tabela
+                        document.querySelectorAll("table tbody tr").forEach(function (e) { e.remove() })
+                        break
+                    case "2":
+                        toastr.error("Erro no cadastramento!!!", "Pergunta/Respostas!!");
+                        break;
+                    case "3":
+                        mensagem = "Pergunta já Cadastrada!!";
+                        EsconderAlerta();
+                        error_message.innerHTML = mensagem;
+                        ExibirAlerta();
+                        break;
+                    default:
+                        EsconderAlerta();
+                        toastr.error("Contacto O administrador do Sistema", resposta);
+
+                }
+            }
+
+        });
+
+    }
+
+    function Limpar() {
+
+    }
+    function ExibirAlerta() {
+        $("#DivAlerta").css("display", "block")
+    }
+
+    function EsconderAlerta() {
+        $("#DivAlerta").css("display", "none")
+    }
+
+
+</script>
+
+

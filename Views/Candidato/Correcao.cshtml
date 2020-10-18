@@ -1,0 +1,136 @@
+﻿@model IEnumerable<Exame_Online.ModelsView.PerguntaView>
+@{
+    ViewData["Title"] = "Conta Candidato";
+    Layout = "~/Views/Shared/LayoutInicial.cshtml";
+
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card-box card shadow">
+                <div class="card-body border-bottom">
+                    <div class="clearfix">
+                        <div class="float-left">
+                            <h3 class="logo mb-0">Candidato N# </h3>
+                        </div>
+                        <div class="float-right">
+                            <h3 class="mb-0">Data: @DateTime.Now</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="float-left">
+                                    <h4><strong>Nome Completo: </strong></h4>
+                                    <address>
+                                        <strong></strong><br>
+                                        Email: jajaja@hotmail.com<br>
+                                        Tel: +234 7869 3456
+                                    </address>
+                                </div>
+                                <div class="float-right text-right">
+                                    <h4><strong>Teste de: </strong></h4>
+                                    <address>
+                                        <strong>Lingua Portuguesa </strong><br>
+
+                                        Curso: Informática<br>
+                                       Realizado:20/08/2020
+                                    </address>
+                                </div>
+                            </div><!-- end col -->
+                        </div>
+                        <hr />
+                        <!-- end row -->
+                        @if (Model != null)
+                        {
+
+                            @foreach (var p in Model)
+                            {
+
+                                <div id="divPergunta">
+                                    <span class="text-right mt-3 font-weight-600"><strong>@p.Pergunta_Nr - </strong> @p.Pergunta </span> <strong> Cotaçao: @p.Valor </strong> <strong> Tipo de Pertunta: @p.TipoPergunta </strong>
+                                </div>
+                                <ul>
+                                    @foreach (var r in p.Opcoes)
+                                    {
+
+                                        if (r.TipoPergunta != null)
+                                        {
+                                            switch (r.TipoPergunta)
+                                            {
+                                                case "Única":
+
+                                                    if (r.cotacao > 0 && r.Selecionado != null)
+                                                    {
+                                                        <li>@r.RespostaSistema Acertou </li>
+                                                    }
+                                                    else if (r.Selecionado == null)
+                                                    {
+                                                        <li>@r.RespostaSistema Não Selecionado </li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li>@r.RespostaSistema Errou <div class="icon mx-auto">
+    <i class="glyphicon glyphicon-check text-success"></i>
+</div> </li>
+                                                    }
+
+                                                    break;
+                                                case "Multiplas":
+                                                    if (r.cotacao > 0 && r.Selecionado != null)
+                                                    {
+                                                        <li>@r.RespostaSistema Acertou </li>
+                                                    }
+                                                    else if (r.Selecionado == null)
+                                                    {
+                                                        <li>@r.RespostaSistema Não Selecionado </li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li>@r.RespostaSistema Errou </li>
+                                                    }
+
+                                                    break;
+                                                default:
+                                                    if (r.RespostaSistema == r.RespostaTexte)
+                                                    {
+                                                        <li>@r.RespostaSistema Acertou </li>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <li>@r.RespostaTexte Errou </li>
+
+                                                    }
+                                                    break;
+                                            }
+
+                                        }
+
+                                    }
+
+                                </ul>
+                            }
+                        }
+                        <div class="row">
+                            <div class="col-xl-4 col-12 offset-xl-8">
+                                <h4 class="text-right text-xl">Cotação Final : 90%</h4>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="d-print-none">
+                            <div class="float-right">
+                                <a href="javascript:window.print()" class="btn btn-primary"><i class="fa fa-print"></i>Imprimir</a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,514 @@
+﻿@model IEnumerable<Exame_Online.ModelsView.DiscplinaViewModel>
+@{
+    ViewData["Title"] = "Lista das Disciplinas";
+    Layout = "~/Views/Shared/Layout.cshtml";
+
+}
+<div class="content">
+
+    <div class="page-header mt-0 shadow p-3">
+        <div class="btn-group mb-0">
+            @*<a href="#" onclick="AddEdit_Disciplina(0)" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>*@
+            <a asp-action="Cadastrar" asp-controller="Disciplina" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+        </div>
+    </div>
+
+
+    <!-- Page content -->
+    @*<div class="container-fluid pt-8">*@
+
+    <!-- Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h2 class="mb-0"><b>Disciplinas</b>/Cadeiras</h2>
+                </div>
+                <div class="card-body">
+                    <table id="TbDisciplina" class="table-responsive-xl table table-striped table-sm w-100 text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Descrição da Disciplina</th>
+                                <th>Operação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal_Disciplina">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="titulo_Disc"></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal_body">
+                <div class="container">
+                    <!-- Container-->
+                    <form id=" form_Disciplina" name="form_Disiciplina" method="post" autocomplete="off">
+                        <!--Inicia Alerta Div-->
+                        <div class="alert alert-danger mb-0 text-white text-center" style="padding:10px;" role="alert" asp-validation-summary="ModelOnly">
+                            <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+                            <span class="alert-inner--text"><strong>Alerta!</strong> !</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div><!--Fim Alerta Div-->
+
+                        <div class="form-group">
+                            <input hidden id="Id_Disciplina" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Nome_Disciplina">Descrição Disiciplina</label>
+                            <input id="Nome_Disciplina" class="form-control" />
+                            <span id="erro_NomeDisc" class="error_form"></span>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success btn-block" id="btn_Disc"><i class="fa fa-save"></i> <span id="btn_tituloDisc"></span></button>
+                        </div>
+                    </form>
+                </div> <!-- Fim Container-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Para Cadastrar e Editar-->
+<div class="modal fade" id="modal_DiscCurso" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal_DiscCursoTitulo">Add Disciplia/Curso</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body-Curso">
+                <div class="container">
+                    <form id="Form_DisciplinaCurso" name="Form_DisciplinaCurso" method="post">
+                        <div class="form-row">
+                            <div class="col-md-12 ">
+                                <!--Inicio Alerta Dib-->
+                                <div class="alert alert-danger mb-0 text-white text-center" id="DivAlerta" style="padding:10px;display:none;" role="alert">
+                                    <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+                                    <span class="alert-inner--text" id="InfoTexto"><strong>Alerta!</strong> !</span>
+                                    <button type="button" id="btnX" class="close" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div><!--Fim Alerta Div-->
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <input hidden class="form-control" id="Disciplina" />
+                                </div>
+                            </div>
+                            <div class="col-md-7 ">
+                                <div class="form-group">
+                                    <input id="Nome_Disciplina" class="form-control" disabled/>
+                                </div>
+                                <span id="erro_nomeDisc" class="error_form"></span>
+                            </div>
+                            <div class="col-md-5 ">
+                                <div class="form-group">
+                                    <select Id="Estado" name="Estado" class="form-control">
+                                        <option value="-1">-- Selecione Estado --</option>
+                                        <option value="1">-- Activo --</option>
+                                        <option value="2">-- Inactivo --</option>
+                                    </select>
+                                    <span id="erro_Estado" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <select class="form-control Id_Departamento" id="Departamento">
+                                        <option value="-1">----</option>
+                                    </select>
+                                    <span id="erro_Id_Departamento" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <select Id="Curso" name="Id_Curso" class="form-control">
+                                        <option value="-1">----</option>
+                                    </select>
+                                    <span id="erro_Id_Curso" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 ">
+                                <div class="form-group">
+                                    <input id="Perguntas" class="form-control" placeholder="Nº de Perguntas" />
+                                    <span id="erro_pergunta" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input id="duracao" class="form-control" placeholder="Duração do Texte (min)" />
+                                    <span id="erro_duracao" class="error_form"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <a href="#" onclick="Add()" class="btn btn-success btn-block"><i class="fa fa-save"></i> Cadastrar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div><!--Fim Container-->
+            </div>
+        </div>
+
+    </div>
+</div><!-- Fim Modal Para Cadastrar e Editar-->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        ListarDisciplinas();
+        //Reset o Formulario
+        $('#modal_DiscCurso').on('hidden.bs.modal', function () {
+            $('#modal_DiscCurso form')[0].reset();
+            LimparErros();
+        });
+        //Reset o Formulario Disciplina
+        $('#Modal_Disciplina').on('hidden.bs.modal', function () {
+            $('#Modal_Disciplina form')[0].reset();
+        });
+    });
+
+    // Função para Listar Cursos
+    function ListarDisciplinas() {
+
+        $("#TbDisciplina").DataTable({
+            "destroy": true,
+            "retrieve": true,
+            "language": {
+                "lengthMenu": "Exibe _MENU_ Registros por página",
+                "search": "Procurar",
+                "paginate": { "previous": "Retornar", "next": "Avançar" },
+                "zeroRecords": "Nada foi encontrado",
+                "info": "Exibindo página _PAGE_ de _PAGES_",
+                "infoEmpty": "Sem registros",
+                "infoFiltered": "(filtrado de _MAX_ regitros totais)"
+            },
+            /*    "processing": true,*/    // mostrar a progress bar
+            "filter": true,            // habilita o filtro(search box)
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]], //define as opções de paginação
+            "pageLength": 10,      // define o tamanho da página
+            "ajax": {
+                "url": "https://localhost:44308/api/Disciplina/GetAll",
+                "type": "Get",
+                "datatype": "json",
+                "dataSrc": ""
+
+            },
+            "columns": [
+                { "data": "id_Disciplina", "autoWidth": true },
+                { "data": "nome_Disciplina", "autoWidth": true },
+
+                {
+                    "data": "id_Disciplina", "render": function (data) {
+                        return '<a href="#" onclick="AddDisciplinaCurso(' + data + ')"  class="btn btn-warning btn-sm"><i class="fa fa-book"></i></a>'
+                            + '<a href='+'@Url.Action("Editar","Disciplina")?Id='+data+' class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>'
+                            + '<a href="#" onclick=Deletar(' + data + ') class="btn btn-danger btn-sm" > <i class="fa fa-trash"></i></a>'
+                            ;
+                    }
+                },
+
+            ]
+
+        });
+    }
+    // Função exibir o Modal Disciplina
+    function AddEdit_Disciplina(id) {
+        if (id == 0) {
+
+            $("#titulo_Disc").html("Add Disciplina")
+            $("#btn_tituloDisc").html("Cadastrar");
+            $("#btn_Disc").removeClass("btn btn-primary btn-block").addClass("btn btn-success btn-block"); //Remover e Adicionar Class
+            $("#Modal_Disciplina").modal();
+        } else {
+            $.ajax({
+                url: "https://localhost:44324/api/Disciplina/GetById/" + id,
+                type: "GET",
+                dataType: "Json",
+                success: function (data) {
+                    $("#titulo_Disc").html("Editar Disciplina")
+                    $("#btn_tituloDisc").html("Editar");
+                    $("#Id_Disciplina").val(data.DisciplinaId)
+                    $("#Nome_Disciplina").val(data.NomeDisciplina);
+                    $("#btn_Disc").removeClass("btn btn-success btn-block").addClass("btn btn-primary btn-block"); //Remover e Adicionar Class
+                    $("#Modal_Disciplina").modal();
+
+                }, error: function (data, errorThrown) {
+                    swal('Oops...', 'Something went wrong with ajax !', 'error');
+                }
+            }).fail(function () {
+                swal('Oops...', 'Dados não encontrado !', 'error');
+            });
+        }
+    }
+    // -- função para validar os dados
+    function Validar() {
+        var v = true;
+        var IdDisciplina = document.Form_DisciplinaCurso.Disciplina;
+        if (IdDisciplina.value == "") {
+
+            v = false;
+        }
+        else {
+
+
+        }
+        var Estado = document.Form_DisciplinaCurso.Estado;
+        if (Estado.value == "-1") {
+            $("#erro_Estado").show();
+            $("#erro_Estado").html("Selecione o estado");
+            v = false;
+        }
+        else {
+            $("#erro_Estado").hide();
+
+        }
+        var departamento = document.Form_DisciplinaCurso.Departamento;
+        if (departamento.value == "-1") {
+            $("#erro_Id_Departamento").show();
+            $("#erro_Id_Departamento").html("Selecione o departamento");
+            v = false;
+        }
+        else {
+            $("#erro_Id_Departamento").hide();
+        }
+        var IdCurso = document.Form_DisciplinaCurso.Id_Curso;
+        if (IdCurso.value == "-1") {
+            $("#erro_Id_Curso").show();
+            $("#erro_Id_Curso").html("Selecione o  curso");
+            v = false;
+        }
+        else {
+            $("#erro_Id_Curso").hide();
+       
+
+        }
+        var perguntas = document.Form_DisciplinaCurso.Perguntas;
+        if (perguntas.value == "") {
+            $("#erro_pergunta").show();
+            $("#erro_pergunta").html("Digite o Nº total de perguntas");
+            v = false;
+        }
+        else {
+            $("#erro_pergunta").hide();
+        }
+        var duracao = document.Form_DisciplinaCurso.duracao;
+        if (duracao.value == "") {
+            $("#erro_duracao").show();
+            $("#erro_duracao").html("Digite a duração do Teste");
+            v = false;
+        }
+        else {
+            $("#erro_duracao").hide();
+
+        }
+        return v;
+    }
+
+    function LimparErros() {
+
+        $("#erro_Estado").hide();
+        $("#erro_Id_Departamento").hide();
+        $("#erro_Id_Curso").hide();
+        $("#erro_pergunta").hide();
+        $("#erro_duracao").hide();
+    }
+
+    //--Função para exibir o Modal Disciplina/Curso
+    function AddDisciplinaCurso(id) {
+        CarregarDepartamento();
+        $.ajax({
+            url: "https://localhost:44324/api/Disciplina/AddCurso/" + id,
+            type: "GET",
+            dataType: "Json",
+            success: function (data) {
+                $("#modal_DiscCurso #Disciplina").val(data.Id_Disciplina);
+                $("#modal_DiscCurso #Nome_Disciplina").val(data.Nome_Disciplina);
+                $("#modal_DiscCurso").modal();
+            }
+        })
+    }
+
+    //-- Funcão para cadastrar Teste de um curso/nº de perguntas/ duracão do teste
+    function Add() {
+
+        var mensagem;
+        var error_message = document.getElementById("InfoTexto");
+
+        var Val = Validar();
+        if (Val == false) {
+            return false;
+        }
+
+        var model = {
+            Id_Curso: $("#Curso").val(),
+            Id_Disciplina: $("#Disciplina").val(),
+            Estado: $("#Estado").val(),
+            Perguntas: $("#Perguntas").val(),
+            Duracao: $("#duracao").val()
+        }
+
+        $.ajax({
+            url: "/Disciplina/DisciplinaCurso",
+            data: model,
+            type: "Post",
+            dataType: "Json",
+            success: function (resultado) {
+
+                switch (resultado) {
+                    case "1":
+                        toastr.success("Disciplina adicionada com sucesso!!!", "Discipina/Curso!!");
+                        $("#Modal_DisciplinaCurso").model("hide");
+                        $('#Form_DisciplinaCurso')[0].reset();  //  Zerar o Formulário
+                        EsconderAlerta();// Esconder a Div de Erro
+                        break
+                    case "2":
+                        mensagem = "Error: 000x1 Contacte o administrado do Sistema!!";
+                        EsconderAlerta();
+                        error_message.innerHTML = mensagem;
+                        ExibirAlerta();
+                        break
+
+                    case "3":
+                        mensagem = "O Curso de  Disciplina já está Cadastrada no Curso!!";
+                        EsconderAlerta();
+                        error_message.innerHTML = mensagem;
+                        ExibirAlerta();
+                        break
+                    case "4":
+                        mensagem = "Impossível Concluír está Operacao - Quantidade de Perguntas Insuficiente na Base de Dados!!";
+                        EsconderAlerta();
+                        error_message.innerHTML = mensagem;
+                        ExibirAlerta();
+                        break
+                    default:
+                        mensagem = "Error: 000x100 Contacte o administrado do Sistema!!";
+                        EsconderAlerta();
+                        error_message.innerHTML = mensagem;
+                        ExibirAlerta();
+                        break
+                }
+
+            }
+        })
+    };
+
+    function ExibirAlerta() {
+        $("#DivAlerta").css("display", "block")
+    }
+
+    $("#btnX").click(function () {
+        $("#DivAlerta").fadeOut("slow");
+
+    })
+
+    function EsconderAlerta() {
+        $("#DivAlerta").css("display", "none")
+    }
+
+
+
+    //-- Função para eliminar Curso
+    function Deletar(id) {
+        swal({
+            icon: "warning",
+            title: "Deseja Eliminar a Disciplina?",
+            text: "A Disciplina será eliminado da banco de dados",
+            type: 'warning',
+
+            buttons: {
+                cancel: true,
+                confirm: "Confirmar",
+            }
+        }).then((Apagar) => {
+            if (Apagar) {
+                $.ajax({
+                    url: "/Disciplina/Eliminar?Id=" + id,
+                    type: "Delete",
+                    data: {},
+                    dataType: 'json'
+                })
+                    .done(function (data) {
+                        if (data == "1") {
+                            toastr.success("Deletado com sucesso!!!", "Disciplina");
+                            $("#TbDisciplina").DataTable().ajax.reload();
+                        } else {
+                            toastr.error("Erro ao Eliminar!!!", "Erro!!");
+                        }
+
+                    })
+                    .fail(function () {
+                        swal('Oops...', 'Something went wrong with ajax !', 'error');
+                    });
+            }
+
+        })
+
+    }
+    //-- Carregar o dropdown Curso
+    $(".Id_Departamento").change(function () {
+        var id = $(this).val();
+            $.ajax({
+                type: "Get",
+                url: "https://localhost:44324/api/Departamento/DepartCursos/" + id,
+                datatype: "json",
+                success: function (data) {    
+                        var m = '<option value="-1">-- Selecione o Curso --</option>'
+                        for (var i = 0; i < data.length; i++) {
+                            m += '<option value="' + data[i].Id_Curso + '"> ' + data[i].Nome_Curso + '</option>';
+                        }
+                        $("#Curso").html(m);
+                },    
+            }).fail(function () {
+                ResetDropDown();
+            });   
+    });
+
+
+    // Funçao para Carregar dropdown Departamento
+    function CarregarDepartamento() {
+       
+        $.ajax({
+            url: "https://localhost:44324/api/Departamento/GetAll",
+            type: "Get",
+            dataType: "Json",
+            success: function (data) {
+                var html = '<option value="-1">-- Selecione o Departamento --</option>'
+                for (var i = 0; i < data.length; i++) {
+                    html += '<option value="' + data[i].DepartamentoId + '"> ' + data[i].NomeDepartamento + '</option>';
+                }
+                $(".Id_Departamento").html(html);
+            }
+        })
+            .fail(function () {
+                swal('Oops...', 'Sem dados disponíveis!', 'error');
+            });
+    }
+    //Limpar Dropdown Curso
+    function ResetDropDown() {
+        $("#Curso").empty();
+        var dp = '<option value="-1">----</option>'
+        $("#Curso").append(dp);
+    }
+
+
+</script>
+
+
+
+

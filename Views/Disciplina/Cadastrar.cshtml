@@ -1,0 +1,72 @@
+﻿@model Exame_Online.Models.DisciplinaAddModel
+@{
+    ViewData["Title"] = "Cadastrar Disciplina";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+<div class="page-header mt-0 shadow p-3">
+    <ol class="breadcrumb mb-sm-0">
+        <li class="breadcrumb-item"><a asp-action="Lista" asp-controller="Disciplina">Listar</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cadastrar</li>
+    </ol>
+</div>
+<div class="container">
+    <div class="wapper-disciplina">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="mb-0"><b>Cadastrar</b> Disciplina</h2>
+            </div>
+            <div class="card-body">
+ 
+                    <form asp-action="Cadastrar" asp-controller="Disciplina" method="post" autocomplete="off">
+                        <div class="form-row">
+
+                            @*---------- Iniciao da Div de notificação-----------------*@
+                            <div class="col-md-12">
+                                <div class="alert alert-danger mb-0 text-white text-center" style="padding:10px;list-style-type:none" role="alert" asp-validation-summary="ModelOnly">
+                                    <span class="alert-inner--icon"><i class="fe fe-slash"></i></span>
+                                    <span class="alert-inner--text"><strong>Alerta!</strong> !</span>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                                @*---------- Fim da Div de notificação-----------------*@
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input hidden asp-for="Id_Disciplina" class="form-control" />
+                                        <label asp-for="Nome_Disciplina"></label>
+                                        <input asp-for="Nome_Disciplina" class="form-control" />
+                                        <span asp-validation-for="Nome_Disciplina" class="error_form"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success btn-block"><i class="fa fa-save"></i> Cadastrar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+</form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+<script type="text/javascript">
+    $(function () {
+        var msg = '@ViewData["result"]';
+        if (msg == '1')
+        {
+            toastr.success("Cadastrada com sucesso!!!", "Curso!!");
+            window.setTimeout(function () {
+                //Direcionar para lista dos Curso!! depois da autualização
+                window.location.href = "@Url.Action("Lista", "Disciplina")";
+            }, 450);
+        }
+    });
+</script>
